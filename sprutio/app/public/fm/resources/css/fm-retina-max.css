@@ -1,0 +1,22 @@
+/*
+ * «Режим max retina» (Настройки → Интерфейс): СВОИ иконки высокого разрешения поверх оригинальных.
+ * Файл правится руками; правила действуют только при включённой галочке (класс html.fm-retina-max).
+ *
+ * Базовая retina-поддержка (родные иконки из крупных исходников) работает и без галочки — fm-retina.css,
+ * его генерирует stand/tools/make_retina_icons.py.
+ *
+ * Картинки класть в /fm/resources/images/retina-max/ (32×32 или SVG), правило — по образцу:
+ *
+ *   html.fm-retina-max .fm-action-refresh {
+ *     background-image: url('/fm/resources/images/retina-max/refresh.svg');
+ *     background-size: 16px 16px;
+ *   }
+ *
+ * Иконки действий: класс .fm-action-<имя> (список — resources/style.css, ищите actions/16/).
+ * Большие кнопки главной панели: #fm-main-buttons-toolbar .fm-action-<имя>, background-size: 32px 32px.
+ * Иконки типов файлов (спрайт icons_16.png — уникальный рисунок, крупных версий в sprutio нет) — задать здесь
+ *   html.fm-retina-max .fm-file-list-panel td.icon-16-<тип> div { background-image: url(...) !important;
+ *     background-size: 16px 16px !important; background-position: 6px 6px !important; }
+ *
+ * После правки поднимите ?v= у fm-retina-max.css в app.html, чтобы браузеры не держали старую версию.
+ */

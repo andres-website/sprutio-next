@@ -1,0 +1,24 @@
+# Dev-режим: исходники из репозитория монтируются поверх образов.
+#   docker compose -f compose.yml -f compose.dev.yml up -d   (или stand/dev.sh up)
+# Python (app/rpc): правка → stand/dev.sh restart app|rpc.
+# Фронт (app/public): правка → F5 в браузере (nginx отдаёт файлы напрямую).
+services:
+  app:
+    volumes_from: !reset []
+    volumes:
+      - ../sprutio/app:/app:rw
+      - ../sprutio/vendor:/opt/sprutio-vendor:ro
+      - ./ssl:/app/ssl:rw
+      - ./logs:/var/log/fm:rw
+
+  rpc:
+    volumes:
+      - ../sprutio/rpc:/rpc:ro
+      - ../sprutio/vendor:/opt/sprutio-vendor:ro
+
+  nginx:
+    volumes_from: !override
+      - cron
+    volumes:
+      - ../sprutio/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../sprutio/app/public:/app/public:ro

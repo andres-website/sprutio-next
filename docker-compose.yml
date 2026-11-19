@@ -1,52 +1,86 @@
-app:
-  image: beget/sprutio-app
-  links:
-    - redis:fm-redis
-    - rpc:fm-rpc
-  volumes_from:
-    - frontend
-  volumes:
-    - "./ssl:/app/ssl:rw"
-    - "./logs:/var/log/fm:rw"
-  env_file:
-    - "./app.env"
+# sprutio-next — установка на сервер (аналог run.sh оригинала).
+#
+# Файловый менеджер работает с файлами и пользователями ЭТОГО сервера: контейнер rpc видит корень хоста
+# (/ → /mnt), берёт его passwd/group/shadow, входят обычные пользователи сервера со своими паролями,
+# а операции с файлами выполняются от имени вошедшего пользователя. Как у оригинала Beget.
+#
+#   ./install.sh                         — собрать образы и запустить (или: docker compose up -d --build)
+#   docker compose ps | logs | down      — управление
+#
+# Порты: HTTPS 9443 (FM_HTTPS_PORT, можно "127.0.0.1:9443"), HTTP только локально 9080 (FM_HTTP_PORT).
+# Данные: ./data (ssl-сертификат и секрет cookie, ключ шифрования паролей и сохранённые подключения, логи).
+name: ${COMPOSE_PROJECT_NAME:-sprutio-next}
 
-rpc:
-  image: beget/sprutio-rpc
-  links:
-    - redis:fm-redis
-  volumes_from:
-    - cron
-  volumes:
-    - "/:/mnt:rw"
-    - "./var:/var/spool/fm:rw"
-    - "./logs:/var/log/fm:rw"
-  env_file:
-    - "./rpc.env"
+x-build: &build
+  context: ./sprutio
+  args:
+    BASE: sprutio-next/python
 
-nginx:
-  image: beget/sprutio-nginx
-  links:
-    - app:fm-app
-  volumes_from:
-    - cron
-    - frontend
-  volumes:
-    - "./ssl:/app/ssl:ro"
-    - "./logs:/var/log/nginx:rw"
-  ports:
-    - "127.0.0.1:9080:80"
-    - "9443:443"
+services:
+  base:
+    image: sprutio-next/python
+    build:
+      context: ./sprutio
+      dockerfile: Dockerfile
+    entrypoint: ["/bin/true"]
+    restart: "no"
+    profiles: ["build"]
 
-frontend:
-  image: beget/sprutio-frontend
+  app:
+    image: sprutio-next/app
+    build: {<<: *build, dockerfile: app/Dockerfile}
+    links:
+      - redis:fm-redis
+      - rpc:fm-rpc
+    volumes_from:
+      - frontend
+    volumes:
+      - ./data/ssl:/app/ssl:rw
+      - ./data/logs:/var/log/fm:rw
+    env_file: ./sprutio/app.env
+    restart: unless-stopped
 
-cron:
-  image: beget/sprutio-cron
-  volumes:
-    - "./downloads:/tmp/fm:rw"
+  rpc:
+    image: sprutio-next/rpc
+    build: {<<: *build, dockerfile: rpc/Dockerfile}
+    links:
+      - redis:fm-redis
+    volumes_from:
+      - cron
+    volumes:
+      - /:/mnt:rw                       # корень сервера: файлы и пользователи хоста
+      - ./data/var:/var/spool/fm:rw
+      - ./data/logs:/var/log/fm:rw
+    env_file: ./sprutio/rpc.env
+    restart: unless-stopped
 
-redis:
-  image: redis:3.0
+  nginx:
+    image: sprutio-next/nginx
+    build: {context: ./sprutio, dockerfile: Dockerfile.nginx}
+    links:
+      - app:fm-app
+    volumes_from:
+      - cron
+      - frontend
+    volumes:
+      - ./data/ssl:/app/ssl:ro
+      - ./data/logs:/var/log/nginx:rw
+    ports:
+      - "127.0.0.1:${FM_HTTP_PORT:-9080}:80"
+      - "${FM_HTTPS_PORT:-9443}:443"
+    restart: unless-stopped
 
-# EOF
+  frontend:
+    image: sprutio-next/frontend
+    build: {context: ./sprutio, dockerfile: Dockerfile.frontend}
+
+  cron:
+    image: sprutio-next/cron
+    build: {<<: *build, dockerfile: Dockerfile.cron}
+    volumes:
+      - ./data/downloads:/tmp/fm:rw
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped

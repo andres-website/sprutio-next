@@ -1,0 +1,454 @@
+/* Сгенерировано stand/tools/upscale/make_test_css.py — тест увеличенных иконок, не править руками. */
+@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx) {
+  html.fm-retina-max.fm-rv-xbrz .fm-file-list-panel .cell-icon > div, html.fm-retina-max.fm-rv-xbrz .fm-file-search-list .cell-icon > div,
+  html.fm-retina-max.fm-rv-xbrz .fm-file-size-list .cell-icon > div, html.fm-retina-max.fm-rv-xbrz .fm-site-list .cell-icon > div {
+    background-image: url('/fm/resources/images/retina-max/xbrz/icons_16@2x.png?v=1') !important;
+    background-size: 16px 4108px !important;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-create {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/add.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-operations {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/operations.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-download {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/download.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-logout {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/logout.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-logout {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/logout.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-newfile {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/newfile.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-mkdir {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/mkdir.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-view {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/view.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-edit {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/edit.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-rename {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/rename.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-copy {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/copy.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-move {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/move.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-create-copy {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/create-copy.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-chmod {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/chmod.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-remove {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/remove.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-download-basic {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/download-basic.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-download-zip {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/download-archive.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-download-gzip {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/download-archive.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-download-bz2 {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/download-archive.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-download-tar {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/download-archive.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-open {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/open.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-site-list {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/domains.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-search {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/search.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-navigate {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/navigate.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-clipboard {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/clipboard.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-clipboard {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/clipboard.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-copy-path {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/copy-path.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-copy-path {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/copy-path.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-copy-entry {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/copy-entry.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-remote {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/remote.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-remote-webdav {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/webdav.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-local {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/local.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-htpasswd {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/password.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-ip-block {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/ip-block.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-share-access {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/share.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-settings {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/settings.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-up {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/up.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-root {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/root.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-extract-archive {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/extract-archive.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-connect-ftp {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/server_go.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-connect-webdav {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/server_go.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-backup-files {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/backup_files.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-backup-mysql {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/backup_mysql.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-action-backup-remote {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/remote_backup.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-icon-calendar {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/cal.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-icon-server {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/server.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-icon-task {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/planned.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-icon-save {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/save.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-icon-edit {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/operations.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-icon-add {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/add.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .fm-icon-remove {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/remove.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .ux-mu-icon-action-ok {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/check.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .ux-mu-icon-action-abort {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/cancel.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .ux-mu-icon-action-remove {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/delete.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-xbrz .ux-mu-icon-action-browse {
+    background-image: url('/fm/resources/images/retina-max/xbrz/actions/browse.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-file-list-panel .cell-icon > div, html.fm-retina-max.fm-rv-esrgan .fm-file-search-list .cell-icon > div,
+  html.fm-retina-max.fm-rv-esrgan .fm-file-size-list .cell-icon > div, html.fm-retina-max.fm-rv-esrgan .fm-site-list .cell-icon > div {
+    background-image: url('/fm/resources/images/retina-max/esrgan/icons_16@2x.png?v=1') !important;
+    background-size: 16px 4108px !important;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-create {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/add.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-operations {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/operations.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-download {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/download.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-logout {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/logout.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-logout {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/logout.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-newfile {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/newfile.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-mkdir {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/mkdir.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-view {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/view.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-edit {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/edit.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-rename {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/rename.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-copy {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/copy.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-move {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/move.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-create-copy {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/create-copy.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-chmod {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/chmod.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-remove {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/remove.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-download-basic {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/download-basic.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-download-zip {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/download-archive.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-download-gzip {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/download-archive.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-download-bz2 {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/download-archive.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-download-tar {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/download-archive.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-open {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/open.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-site-list {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/domains.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-search {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/search.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-navigate {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/navigate.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-clipboard {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/clipboard.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-clipboard {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/clipboard.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-copy-path {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/copy-path.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-copy-path {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/copy-path.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-copy-entry {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/copy-entry.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-remote {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/remote.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-remote-webdav {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/webdav.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-local {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/local.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-htpasswd {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/password.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-ip-block {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/ip-block.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-share-access {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/share.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-settings {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/settings.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-up {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/up.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-root {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/root.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-extract-archive {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/extract-archive.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-connect-ftp {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/server_go.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-connect-webdav {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/server_go.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-backup-files {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/backup_files.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-backup-mysql {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/backup_mysql.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-action-backup-remote {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/remote_backup.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-icon-calendar {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/cal.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-icon-server {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/server.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-icon-task {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/planned.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-icon-save {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/save.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-icon-edit {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/operations.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-icon-add {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/add.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .fm-icon-remove {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/remove.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .ux-mu-icon-action-ok {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/check.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .ux-mu-icon-action-abort {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/cancel.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .ux-mu-icon-action-remove {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/delete.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max.fm-rv-esrgan .ux-mu-icon-action-browse {
+    background-image: url('/fm/resources/images/retina-max/esrgan/actions/browse.png?v=1');
+    background-size: 16px 16px;
+  }
+  html.fm-retina-max #fm-main-buttons-toolbar .x-btn-icon-el { background-size: auto; }
+}

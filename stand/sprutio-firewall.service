@@ -1,0 +1,13 @@
+[Unit]
+Description=sprutio stand: restrict published port 9443 to allowed IPs (DOCKER-USER)
+After=docker.service
+Requires=docker.service
+PartOf=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/sh -c '/opt/sprutio-next/stand/firewall.sh $(cat /opt/sprutio-next/stand/allowed_ips)'
+
+[Install]
+WantedBy=multi-user.target docker.service

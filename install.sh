@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# sprutio-next: установка/обновление на этом сервере.
+#   ./install.sh            — собрать образы из исходников и запустить (повторный запуск = обновление)
+#   ./install.sh stop       — остановить
+#   ./install.sh logs [rpc] — логи
+set -euo pipefail
+cd "$(dirname "$0")"
+
+die() { echo "Ошибка: $*" >&2; exit 1; }
+command -v docker >/dev/null || die "нужен Docker — https://docs.docker.com/engine/install/"
+docker compose version >/dev/null 2>&1 || die "нужен Docker Compose v2 (команда 'docker compose')"
+[ "$(id -u)" = 0 ] || docker info >/dev/null 2>&1 || die "запустите от root или пользователем из группы docker"
+
+case "${1:-install}" in
+  stop) exec docker compose down;;
+  logs) shift; exec docker compose logs --tail=100 "$@";;
+  install) ;;
+  *) die "неизвестная команда: $1 (install | stop | logs)";;
+esac
+
+mkdir -p data/ssl data/var data/logs data/downloads
+chmod 700 data data/ssl data/var
+
+echo "== Сборка образов (в первый раз ~10 минут)"
+docker compose --profile build build base
+docker compose build app rpc nginx frontend cron
+
+echo "== Запуск"
+# -V для frontend: статика фронта лежит в анонимном томе — без пересоздания обновления не доходят до nginx
+docker compose up -d --force-recreate -V frontend
+docker compose up -d --remove-orphans
+
+PORT=${FM_HTTPS_PORT:-9443}
+HOST=$(hostname -I 2>/dev/null | awk '{print $1}')
+cat <<EOF
+
+Готово: https://${HOST:-<адрес-сервера>}:${PORT##*:}
+Вход — логин и пароль пользователя этого сервера (сертификат самоподписанный — браузер предупредит).
+Порт открыт всем: при необходимости ограничьте доступ файрволом.
+EOF

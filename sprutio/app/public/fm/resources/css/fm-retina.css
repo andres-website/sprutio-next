@@ -1,0 +1,38 @@
+/* Сгенерировано stand/tools/make_retina_icons.py — не править руками.
+   Базовая retina (всегда): только иконки, у которых есть 32-px версия того же рисунка.
+   Свои замены — в fm-retina-max.css (галочка «Режим max retina»). */
+@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx) {
+  html .fm-action-upload {
+    background-image: url('/fm/resources/images/actions/32/upload.png');
+    background-size: 16px 16px;
+  }
+  html .fm-action-analyze-size {
+    background-image: url('/fm/resources/images/actions/32/analyze-size.png');
+    background-size: 16px 16px;
+  }
+  html .fm-action-search-files {
+    background-image: url('/fm/resources/images/actions/32/search-files.png');
+    background-size: 16px 16px;
+  }
+  html .fm-action-search-text {
+    background-image: url('/fm/resources/images/actions/32/search-text.png');
+    background-size: 16px 16px;
+  }
+  html .fm-action-refresh {
+    background-image: url('/fm/resources/images/actions/32/refresh.png');
+    background-size: 16px 16px;
+  }
+  html .fm-action-home {
+    background-image: url('/fm/resources/images/actions/32/home.png');
+    background-size: 16px 16px;
+  }
+  html .fm-action-create-archive {
+    background-image: url('/fm/resources/images/actions/32/create-archive.png');
+    background-size: 16px 16px;
+  }
+  html .ux-mu-icon-action-upload {
+    background-image: url('/fm/resources/images/actions/32/upload.png');
+    background-size: 16px 16px;
+  }
+  html #fm-main-buttons-toolbar .x-btn-icon-el { background-size: auto; }
+}

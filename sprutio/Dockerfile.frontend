@@ -1,0 +1,5 @@
+# Статика фронта (ExtJS-сборка, исходники, вендорные bower-библиотеки) как том /app/public.
+FROM busybox:1.37
+COPY app/public/ /app/public/
+VOLUME /app/public
+CMD ["/bin/true"]

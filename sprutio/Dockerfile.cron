@@ -1,0 +1,10 @@
+ARG BASE=sprutio-next/python
+FROM ${BASE}
+
+RUN apt-get update -qq && apt-get install -y -qq --no-install-recommends cron && rm -rf /var/lib/apt/lists/*
+
+COPY run-cron.sh /etc/services.d/cron/run
+COPY cron.d/ /etc/cron.d/
+RUN chmod +x /etc/services.d/*/run && chmod 0644 /etc/cron.d/*
+
+VOLUME /tmp/fm

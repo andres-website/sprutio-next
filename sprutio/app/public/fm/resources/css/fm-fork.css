@@ -1,0 +1,133 @@
+/* Дополнения форка sprutio: строка пути (как в Проводнике) и загрузка перетаскиванием. */
+
+/* --- верхняя полоса с инпутами пути (поверх главного меню #fm-main-top-toolbar) --------------------- */
+html .fm-fork-topbar {
+  position: fixed;
+  z-index: 1000;                /* выше тулбара; окна и меню ExtJS — от 19000, они поверх */
+  box-sizing: border-box;
+  background: linear-gradient(to bottom, #303645 0%, #484e5e 18%, #505769 39%, #545b6e 62%, #484e5e 85%, #303645 100%);
+}
+html .fm-fork-path-group {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+html .fm-fork-topbar .fm-path-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  box-sizing: border-box;
+  height: 22px;
+  margin: 0;
+  padding: 0 6px;
+  border: 1px solid #4a5366;
+  border-radius: 2px;
+  outline: none;
+  font: 13px/20px "Open Sans", Arial, sans-serif;
+  color: #000;
+  background: #e9edf2;
+}
+html .fm-fork-topbar .fm-path-input.fm-path-input-active {
+  background: #fff;
+}
+html .fm-fork-topbar .fm-path-input:focus {
+  background: #fff;
+  border-color: #5b9bd5;
+}
+html .fm-fork-topbar .fm-fullpath-btn,
+html .fm-fork-topbar .fm-fork-menu-toggle {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  margin-left: 4px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+html .fm-fork-topbar .fm-fullpath-btn {
+  background: #e9edf2 url('/fm/resources/images/actions/16/copy-path.png') no-repeat center;
+}
+html .fm-fork-topbar .fm-fork-menu-toggle {
+  color: #e9edf2;
+  font: 14px/22px Arial, sans-serif;
+  text-align: center;
+  user-select: none;
+}
+html .fm-fork-topbar .fm-fullpath-btn:hover,
+html .fm-fork-topbar .fm-fork-menu-toggle:hover {
+  background-color: #5b9bd5;
+}
+html .fm-fork-topbar-expanded .fm-fork-menu-toggle {
+  transform: rotate(180deg);
+}
+/* выдвинутое оригинальное меню — поверх контента под нашей полосой */
+html .fm-fork-menu-expanded {
+  z-index: 999 !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+}
+html .fm-fullpath-popup {
+  position: fixed;
+  z-index: 100000;
+  box-sizing: border-box;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid #b7c3cf;
+  border-radius: 3px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+html .fm-fullpath-popup .fm-fullpath-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  height: 24px;
+  padding: 0 6px;
+  border: 1px solid #b7c3cf;
+  border-radius: 2px;
+  outline: none;
+  font: 13px/22px monospace;
+  color: #000;
+}
+html .fm-fullpath-popup .fm-fullpath-note {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #4a7a3a;
+}
+
+/* --- загрузка перетаскиванием ------------------------------------------------------------------ */
+/* панели ExtJS уже позиционированы (absolute/relative) — overlay ложится поверх панели целиком */
+html .fm-drop-target::after,
+html .fm-drop-denied::after {
+  content: attr(data-fm-drop-label);
+  white-space: pre-line;
+  position: absolute;
+  z-index: 100;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  font-size: 15px;
+  pointer-events: none;
+  border-radius: 4px;
+}
+html .fm-drop-target::after {
+  color: #1d5d93;
+  background: rgba(91, 155, 213, 0.14);
+  border: 2px dashed #5b9bd5;
+}
+html .fm-drop-denied::after {
+  color: #8a3b3b;
+  background: rgba(200, 80, 80, 0.10);
+  border: 2px dashed #c86464;
+}
+
+/* --- настройки: вкладка «Интерфейс» ------------------------------------------------------------- */
+html .fm-settings-hint {
+  color: #6b7785;
+  font-size: 12px;
+  line-height: 16px;
+  margin: 2px 0 0 22px;
+}

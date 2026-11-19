@@ -1,0 +1,40 @@
+# Новый стек (форк): образы собираются из исходников репозитория.
+#   stand/dev.sh up-next     — собрать и поднять вместо оригинальных образов
+# Песочница, ssl, var и тесты — общие с оригиналом, поэтому эталонные тесты гоняются на обоих стеках.
+x-build: &build
+  context: ../sprutio
+  args:
+    BASE: sprutio-next/python
+
+services:
+  base:
+    image: sprutio-next/python
+    build:
+      context: ../sprutio
+      dockerfile: Dockerfile
+    entrypoint: ["/bin/true"]
+    restart: "no"
+    profiles: ["build"]
+
+  app:
+    image: sprutio-next/app
+    build: {<<: *build, dockerfile: app/Dockerfile}
+
+  rpc:
+    image: sprutio-next/rpc
+    build: {<<: *build, dockerfile: rpc/Dockerfile}
+
+  nginx:
+    image: sprutio-next/nginx
+    build: {context: ../sprutio, dockerfile: Dockerfile.nginx}
+
+  frontend:
+    image: sprutio-next/frontend
+    build: {context: ../sprutio, dockerfile: Dockerfile.frontend}
+
+  cron:
+    image: sprutio-next/cron
+    build: {<<: *build, dockerfile: Dockerfile.cron}
+
+  redis:
+    image: redis:7-alpine

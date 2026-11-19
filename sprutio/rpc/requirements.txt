@@ -1,0 +1,35 @@
+# Форк: Python 3.12. Форки Beget (psutil, setproctitle, python-libarchive-py3) заменены пакетами PyPI,
+# beget_msgpack вендорен в sprutio/vendor.
+msgpack>=1.0,<2
+setproctitle
+psutil
+
+# for listing mtime
+tzlocal
+
+# for auth
+python-pam
+redis>=5,<6
+
+# for archives (python-libarchive: тот же SWIG-модуль _libarchive, что и в форке Beget)
+python-libarchive
+rarfile
+pylzma  # содержит py7zlib (распаковка 7z)
+pyinotify
+pyasyncore  # pyinotify импортирует asyncore, удалённый в Python 3.12
+
+# for editor and finder
+binaryornot
+chardet
+
+# for ftp
+ftputil
+
+# for ssh
+paramiko
+cryptography  # шифрование паролей удалённых серверов (misc/secret_box.py)
+
+# for webdav (оригинальный API webdav.client)
+webdavclient
+pycurl
+lxml

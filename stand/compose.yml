@@ -1,0 +1,98 @@
+# Стенд sprutio «как есть»: оригинальные образы beget/sprutio-* (2017).
+# Отличия от upstream docker-compose.yml:
+#  - формат compose v2 (services:), т.к. docker compose v2 не читает v1-формат;
+#  - rpc монтирует не корень хоста "/", а песочницу ./sandbox-root
+#    (свои passwd/shadow с тестовым пользователем, без доступа к системе VPS);
+#  - 9443 публикуется наружу, доступ ограничен iptables (DOCKER-USER) по IP.
+name: sprutio
+
+services:
+  app:
+    image: ${SPRUTIO_APP_IMAGE:-beget/sprutio-app}
+    links:
+      - redis:fm-redis
+      - rpc:fm-rpc
+    volumes_from:
+      - frontend
+    volumes:
+      - ./ssl:/app/ssl:rw
+      - ./logs:/var/log/fm:rw
+    env_file: ../sprutio/app.env
+    restart: unless-stopped
+
+  rpc:
+    image: ${SPRUTIO_RPC_IMAGE:-beget/sprutio-rpc}
+    links:
+      - redis:fm-redis
+    volumes_from:
+      - cron
+    volumes:
+      - ./sandbox-root:/mnt:rw
+      - ./var:/var/spool/fm:rw
+      - ./logs:/var/log/fm:rw
+    env_file: ../sprutio/rpc.env
+    restart: unless-stopped
+
+  nginx:
+    image: ${SPRUTIO_NGINX_IMAGE:-beget/sprutio-nginx}
+    links:
+      - app:fm-app
+    volumes_from:
+      - cron
+      - frontend
+    volumes:
+      - ./ssl:/app/ssl:ro
+      - ./logs:/var/log/nginx:rw
+    ports:
+      - "127.0.0.1:${FM_HTTP_PORT:-9080}:80"
+      - "${FM_HTTPS_PORT:-9443}:443"   # можно "127.0.0.1:9444" — только локально
+    restart: unless-stopped
+
+  frontend:
+    image: ${SPRUTIO_FRONTEND_IMAGE:-beget/sprutio-frontend}
+
+  cron:
+    image: ${SPRUTIO_CRON_IMAGE:-beget/sprutio-cron}
+    volumes:
+      - ./downloads:/tmp/fm:rw
+    restart: unless-stopped
+
+  # Тестовый SSH/SFTP-сервер для проверки «удалённого сервера» (как в xftp). Наружу не публикуется:
+  # rpc ходит к нему по имени sshd:2222 внутри сети стенда. Учётка — FM_SFTP_USER/FM_SFTP_PASS из .env.
+  sshd:
+    image: lscr.io/linuxserver/openssh-server:latest
+    # NET_ADMIN — чтобы для замеров можно было включить задержку сети: stand/bench/latency.sh 20ms
+    cap_add: [NET_ADMIN]
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: Etc/UTC
+      PASSWORD_ACCESS: "true"
+      USER_NAME: ${FM_SFTP_USER:-sftpuser}
+      USER_PASSWORD: ${FM_SFTP_PASS:?FM_SFTP_PASS не задан в stand/.env}
+    restart: unless-stopped
+
+  # Тестовый FTP (pyftpdlib), ftpd:21 внутри сети стенда.
+  ftpd:
+    build: ./testservers/ftp
+    image: sprutio-test/ftpd
+    environment:
+      FTP_USER: ${FM_FTP_USER:-ftpuser}
+      FTP_PASS: ${FM_FTP_PASS:?FM_FTP_PASS не задан в stand/.env}
+    restart: unless-stopped
+
+  # Тестовый WebDAV (Apache mod_dav, Basic auth), http://webdav/ внутри сети стенда.
+  webdav:
+    build: ./testservers/webdav
+    image: sprutio-test/webdav
+    environment:
+      AUTH_TYPE: Basic
+      USERNAME: ${FM_DAV_USER:-davuser}
+      PASSWORD: ${FM_DAV_PASS:?FM_DAV_PASS не задан в stand/.env}
+    restart: unless-stopped
+
+  redis:
+    image: redis:3.0
+    # сессии временные; tmpfs — чтобы redis 3 (оригинал) и redis 7 (форк) не делили RDB-дамп
+    tmpfs: /data
+    restart: unless-stopped
