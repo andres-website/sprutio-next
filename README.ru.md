@@ -1,4 +1,6 @@
-# Sprut.io Next — fork Open Source File Manager
+# Sprut.io Next
+
+<sub>fork of Sprut.io file manager</sub>
 
 Возрождённый двухпанельный веб-файловый менеджер — форк [Sprutio](https://github.com/LTD-Beget/sprutio) от Beget.
 
