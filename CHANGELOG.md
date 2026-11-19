@@ -3,8 +3,10 @@
 Versions follow [Semantic Versioning](https://semver.org/); 0.x — work in progress.
 
 ## [Unreleased]
-- Installation on a server: `docker-compose.yml` and `install.sh`.
-- Test of upscaled icons in "Max retina mode": xBRZ and Real-ESRGAN variants (Settings → Interface).
+
+## [0.5.0] — 2026-11-19 — Server installation
+- Installation on a server: `docker-compose.yml` and `install.sh` — works with the server's own files and users.
+- Upscaled icons in "Max retina mode": xBRZ and Real-ESRGAN variants to compare (Settings → Interface).
 
 ## [0.4.0] — 2026-11-19 — Interface
 - Path inputs above both panels on the top menu bar; the ▾ button slides the original menu out temporarily.
