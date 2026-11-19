@@ -18,7 +18,7 @@ Thanks to the Sprut.io Team and Beget!
 - An address bar for each panel: paste a path and go
 - "Full path" (to the selected file) in one click
 - Drag-and-drop file upload
-- 138 automated tests (API and in-browser E2E) — written against the original interface and logic
+- Automated tests (API and in-browser E2E) — written against the original interface and logic
 
 ## Installation
 
