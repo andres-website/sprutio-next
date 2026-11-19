@@ -19,7 +19,9 @@ case "${1:-install}" in
 esac
 
 mkdir -p data/ssl data/var data/logs data/downloads
-chmod 700 data data/ssl data/var
+# воркеры работают от имени вошедшего пользователя: им нужен доступ к базе настроек (var) и временным файлам
+chmod 755 data data/ssl data/var data/logs
+chmod 1777 data/downloads
 
 echo "== Сборка образов (в первый раз ~10 минут)"
 docker compose --profile build build base
@@ -36,5 +38,6 @@ cat <<EOF
 
 Готово: https://${HOST:-<адрес-сервера>}:${PORT##*:}
 Вход — логин и пароль пользователя этого сервера (сертификат самоподписанный — браузер предупредит).
-Порт открыт всем: при необходимости ограничьте доступ файрволом.
 EOF
+case "$PORT" in 127.0.0.1:*|localhost:*) echo "Порт доступен только с этого сервера." ;;
+  *) echo "Порт открыт всем: при необходимости ограничьте доступ файрволом." ;; esac
