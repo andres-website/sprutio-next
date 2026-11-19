@@ -46,7 +46,7 @@ Log in at `https://<server-address>:9443` as `fmtest` with the `FM_TEST_PASS` pa
 ## Details
 
 **Backend**
-- Ported to Python 3.12 and Tornado 6 (originally Python 2.7 / Tornado 4); msgpack 1.x, redis-py 3+.
+- Ported to Python 3.12 and Tornado 6; msgpack 1.x, redis-py 3+.
 - SFTP, FTP and WebDAV verified against test servers.
 
 **Search**
