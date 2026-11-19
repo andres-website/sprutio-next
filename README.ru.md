@@ -4,7 +4,7 @@
 
 Двухпанельный веб-файловый менеджер — форк [Sprutio](https://github.com/LTD-Beget/sprutio) от Beget.
 
-**Неофициальный.** С Beget не связан. Форк развивает оригинальный файловый менеджер на вкус автора. [English](README.md)
+**Форк неофициальный.** С Beget не связан, развивает оригинальный файловый менеджер на вкус автора. [English](README.md)
 
 ![sprutio-next](promo/sprutio-next-ui.png)
 
