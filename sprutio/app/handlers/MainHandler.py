@@ -34,4 +34,5 @@ class MainHandler(BaseHandler):
         if self.application.options.debug:
             self.render("app.debug.html", language=self.get_current_language())
         else:
-            self.render("app.html", language=self.get_current_language(), dev=dev)
+            self.render("app.html", language=self.get_current_language(), dev=dev,
+                        logout_url=settings.LOGOUT_URL)

@@ -345,5 +345,6 @@
   "Upscaled original icons on Retina/4K screens (test: compare the two methods). Without it the original icons are shown, sharp where a native large version exists.": "Увеличенные оригинальные иконки на экранах Retina/4K (тест: сравните два способа). Без галочки — оригинальные иконки, чёткие там, где есть родная крупная версия.",
   "Upscaled icons (test)": "Способ увеличения (тест)",
   "Creating folders...": "Создаю папки…",
-  "Unable to read the dropped folder: $1": "Не удалось прочитать перетащенную папку: $1"
+  "Unable to read the dropped folder: $1": "Не удалось прочитать перетащенную папку: $1",
+  "Open this folder in the other panel": "Открыть эту папку в другой панели"
 }

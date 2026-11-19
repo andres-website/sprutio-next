@@ -60,13 +60,13 @@
                         </div>
                         <div class="form-group" align="center">
                             <label>
-                                <input type="radio" id="input-language" name="language" value="en" checked=true> <img src="static/en.png" height=32>
+                                <input type="radio" id="input-language" name="language" value="en"{% if language == "en" %} checked{% end %}> <img src="static/en.png" height=32>
                             </label>
                             <label>
-                                <input type="radio" id="input-language" name="language" value="ru"> <img src="static/ru.png" height=32>
+                                <input type="radio" id="input-language" name="language" value="ru"{% if language == "ru" %} checked{% end %}> <img src="static/ru.png" height=32>
                             </label>
                             <label>
-                                <input type="radio" id="input-language" name="language" value="de"> <img src="static/de.png" height=32>
+                                <input type="radio" id="input-language" name="language" value="de"{% if language == "de" %} checked{% end %}> <img src="static/de.png" height=32>
                             </label>
                         </div>
                         <div class="form-group">
@@ -87,5 +87,11 @@
     </div>
 </div>
 
+    <script>
+        // форк: выбор языка сразу перерисовывает страницу входа на этом языке
+        $(document).on('change', 'input[name=language]', function () {
+            window.location.search = '?language=' + encodeURIComponent(this.value);
+        });
+    </script>
 </body>
 </html>

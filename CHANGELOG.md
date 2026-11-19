@@ -3,6 +3,10 @@
 Versions follow [Semantic Versioning](https://semver.org/); 0.x — work in progress.
 
 ## [Unreleased]
+- ⇢ / ⇠ button: open the same folder in the other panel (like Total Commander).
+- `FM_LOGOUT_URL`: your own address for the Logout button.
+- Editor and viewer: files up to 20 MB.
+- Login page: browser language by default, language flags switch the page immediately.
 - Drag-and-drop upload of folders with their whole structure (nested and empty folders included).
 
 ## [0.5.0] — 2026-11-19 — Server installation

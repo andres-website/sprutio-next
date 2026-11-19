@@ -294,6 +294,52 @@
         }
     }
 
+    // --- та же папка во второй панели (как в Total Commander) -----------------------------------------
+    function mirrorToOtherPanel(panel) {
+        var other = FM.helpers.NextPanel(panel);
+        if (!panel || !other || !panel.session) {
+            return;
+        }
+        var same = other.session && other.session.type === panel.session.type &&
+            JSON.stringify(other.session.server_id || other.session.host) === JSON.stringify(panel.session.server_id || panel.session.host);
+        if (!same) {
+            // другая панель смотрит на другой сервер — переносим и подключение (сессию)
+            other.session = Ext.ux.Util.clone(panel.session);
+        }
+        FM.Actions.Open.execute(other, panel.session.path);
+    }
+
+    // --- «Выход»: свой адрес из FM_LOGOUT_URL (window.FM_LOGOUT_URL из app.html) -----------------------
+    (function patchLogout() {
+        if (!(window.FM && FM.Actions && FM.Actions.Logout && FM.Actions.Logout.setHandler)) {
+            setTimeout(patchLogout, 200);
+            return;
+        }
+        FM.Actions.Logout.setHandler(function () {
+            FM.backend.ajaxSend('/actions/main/logout', {
+                success: function () {
+                    if (window.FM_LOGOUT_URL) {
+                        window.location.href = window.FM_LOGOUT_URL;
+                    } else {
+                        window.location.reload();     // как в оригинале — на страницу входа
+                    }
+                },
+                failure: function () {
+                    FM.helpers.ShowError(tr('Error during logout. Please contact Support.'));
+                }
+            });
+        });
+    })();
+
+    // --- редактор и просмотр: файлы до 20 МБ (в оригинале 5 МБ) ---------------------------------------
+    (function raiseMaxSize() {
+        if (!(window.FM && FM.File && FM.File.MAX_SIZE)) {
+            setTimeout(raiseMaxSize, 200);
+            return;
+        }
+        FM.File.MAX_SIZE = 20 * 1024 * 1024;
+    })();
+
     // --- «Весь путь» -----------------------------------------------------------------------------------
     var fullPathPopup = null;
 
@@ -439,11 +485,19 @@
             group.setAttribute('data-side', side);
             group.innerHTML = '<input type="text" class="fm-path-input" spellcheck="false" autocomplete="off" id="fm-fork-path-' +
                 side + '"><span class="fm-fullpath-btn" role="button"></span>' +
+                '<span class="fm-fork-mirror-btn" role="button">' + (side === 'Left' ? '⇢' : '⇠') + '</span>' +
                 (side === 'Right' ? '<span class="fm-fork-menu-toggle" role="button">▾</span>' : '');
             topbar.appendChild(group);
             var input = group.querySelector('input');
             var btn = group.querySelector('.fm-fullpath-btn');
             btn.title = tr('Full path of the selected file (copied to clipboard)');
+            var mirror = group.querySelector('.fm-fork-mirror-btn');
+            mirror.title = tr('Open this folder in the other panel');
+            mirror.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                mirrorToOtherPanel(panelBySide(side));
+            });
             input.addEventListener('focus', function () {
                 var panel = panelBySide(side);
                 if (FM.Active !== panel && FM.helpers && FM.helpers.SetActivePanel) {
@@ -874,6 +928,7 @@
         setMenuExpanded: setExpanded,
         uploadDropped: uploadDropped,
         uploadTree: uploadTree,
+        mirrorToOtherPanel: mirrorToOtherPanel,
         collectEntries: collectEntries
     };
 })();

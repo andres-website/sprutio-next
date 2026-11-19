@@ -7,11 +7,12 @@
     <link rel="stylesheet" href="/fm/ext/src/ux/container/ButtonSegment.css">
     <link rel="stylesheet" href="/fm/ext/src/ux/upload/css/upload.css">
     <!-- форк: строка пути, DnD-загрузка, retina-иконки -->
-    <link rel="stylesheet" href="/fm/resources/css/fm-fork.css?v=8">
+    <link rel="stylesheet" href="/fm/resources/css/fm-fork.css?v=9">
     <link rel="stylesheet" href="/fm/resources/css/fm-retina.css?v=6">
     <link rel="stylesheet" href="/fm/resources/css/fm-retina-max.css?v=1">
     <link rel="stylesheet" href="/fm/resources/css/fm-retina-test.css?v=1">
 
+    <script>window.FM_LOGOUT_URL = {% raw json_encode(logout_url) %};</script>
     <link rel="icon" href="/favicon@2x.ico" type="image/x-icon">
     <link rel="shortcut icon" href="/favicon@2x.ico" type="image/x-icon">
 
@@ -82,7 +83,7 @@
                     $('<script type="text/javascript" src="/fm/loader.js"><\/script>').appendTo(body);
 {% end %}
                     // форк: дополнения интерфейса без пересборки (быстрый поиск и др.)
-                    $('<script type="text/javascript" src="/fm/resources/js/fm-fork.js?v=9"><\/script>').appendTo(body);
+                    $('<script type="text/javascript" src="/fm/resources/js/fm-fork.js?v=10"><\/script>').appendTo(body);
 
 //                    $('<div id="applet_right_embed">' +
 //                        '<applet jnlp_href="/fm/resources/applet.jnlp" archive="/static/app/begetfm.jar" code="begetfm.begetfm" id="applet_right">' +

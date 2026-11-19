@@ -145,6 +145,39 @@ def test_path_helpers_sftp_and_windows(fm_page):
     assert r["empty"] is None
 
 
+def test_mirror_folder_to_other_panel(fm_page, api):
+    """⇢ у инпута левой панели — та же папка открывается в правой (как в Total Commander)."""
+    fm_page.evaluate("p => FM.Actions.Open.execute(FM.Left, p)", api.home + "/site")
+    fm_page.wait_for_function("p => FM.Left.session.path === p", arg=api.home + "/site", timeout=15000)
+    fm_page.locator(".fm-fork-path-group[data-side=Left] .fm-fork-mirror-btn").click()
+    fm_page.wait_for_function("p => FM.Right.session.path === p", arg=api.home + "/site", timeout=15000)
+    assert inp(fm_page, "Right").input_value() == api.home + "/site"
+
+
+def test_logout_url(fm_page):
+    """«Выход» ведёт на FM_LOGOUT_URL, если он задан (window.FM_LOGOUT_URL из app.html)."""
+    assert fm_page.evaluate("window.FM_LOGOUT_URL") == ""
+    fm_page.evaluate("window.FM_LOGOUT_URL = location.origin + '/login?language=en&bye=1'")
+    fm_page.evaluate("FM.Actions.Logout.execute()")
+    fm_page.wait_for_url("**/login?language=en&bye=1", timeout=15000)
+
+
+def test_editor_size_limit(fm_page):
+    assert fm_page.evaluate("FM.File.MAX_SIZE") == 20 * 1024 * 1024
+
+
+def test_login_page_language(page):
+    """Страница входа: выбор флага сразу перерисовывает её на этом языке; без выбора — язык браузера."""
+    from fmclient import BASE
+    page.goto(BASE + "/login")                      # браузер en-US
+    assert page.locator("input[name=language][value=en]").is_checked()
+    sign_in = page.locator("#login-submit").inner_text()
+    page.locator("input[name=language][value=ru]").check()
+    page.wait_for_url("**/login?language=ru", timeout=10000)
+    assert page.locator("input[name=language][value=ru]").is_checked()
+    assert page.locator("#login-submit").inner_text() != sign_in
+
+
 # --- загрузка перетаскиванием ---------------------------------------------------------------------
 
 DROP_JS = """([sel, files, type]) => {

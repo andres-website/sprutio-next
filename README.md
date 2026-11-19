@@ -37,6 +37,7 @@ Open `https://<server-address>:9443` and log in with the username and password o
 - Like the original, the file manager works with this server's files and users; every operation runs
   as the logged-in user. Logging in as root is possible if root has a password.
 - Update: `git pull && sudo ./install.sh`. Stop: `sudo ./install.sh stop`, logs: `sudo ./install.sh logs`.
+- Your own address for the Logout button (e.g. a hosting panel): `sudo FM_LOGOUT_URL=https://example.com ./install.sh`.
 - Another port: `sudo FM_HTTPS_PORT=8443 ./install.sh`. The port is open to everyone — restrict it with a firewall if needed.
 
 ### Try it without server access
@@ -63,8 +64,11 @@ Log in at `https://<server-address>:9443` as `fmtest` with the `FM_TEST_PASS` pa
 **Interface**
 - Path inputs above both panels (on the top menu bar): type or paste a path (`\` works too), Enter to go,
   Ctrl+L / Alt+D to focus. The ▾ button temporarily slides the original menu out below them.
+- ⇢ / ⇠ button next to the input: open the same folder in the other panel, like in Total Commander.
 - "Full path" button: copies the full path of the selected file to the clipboard and shows it
   so you can select a part of it.
+- The editor and viewer open files up to 20 MB.
+- The login page uses the browser language and switches language on the fly.
 - Drag and drop files and folders from your computer onto a panel to upload them into its current folder; folders keep their structure.
 - Sharper icons on Retina/4K screens where a native large version of the same artwork exists;
   an optional "Max retina mode" (Settings → Interface) for upscaled or custom icons.

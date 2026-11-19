@@ -37,6 +37,7 @@ html .fm-fork-topbar .fm-path-input:focus {
   border-color: #5b9bd5;
 }
 html .fm-fork-topbar .fm-fullpath-btn,
+html .fm-fork-topbar .fm-fork-mirror-btn,
 html .fm-fork-topbar .fm-fork-menu-toggle {
   flex: 0 0 auto;
   width: 22px;
@@ -48,6 +49,7 @@ html .fm-fork-topbar .fm-fork-menu-toggle {
 html .fm-fork-topbar .fm-fullpath-btn {
   background: #e9edf2 url('/fm/resources/images/actions/16/copy-path.png') no-repeat center;
 }
+html .fm-fork-topbar .fm-fork-mirror-btn,
 html .fm-fork-topbar .fm-fork-menu-toggle {
   color: #e9edf2;
   font: 14px/22px Arial, sans-serif;
@@ -55,6 +57,7 @@ html .fm-fork-topbar .fm-fork-menu-toggle {
   user-select: none;
 }
 html .fm-fork-topbar .fm-fullpath-btn:hover,
+html .fm-fork-topbar .fm-fork-mirror-btn:hover,
 html .fm-fork-topbar .fm-fork-menu-toggle:hover {
   background-color: #5b9bd5;
 }

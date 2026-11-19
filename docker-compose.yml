@@ -38,6 +38,8 @@ services:
       - ./data/ssl:/app/ssl:rw
       - ./data/logs:/var/log/fm:rw
     env_file: ./sprutio/app.env
+    environment:
+      FM_LOGOUT_URL: ${FM_LOGOUT_URL:-}     # куда вести после «Выхода»; пусто — на страницу входа
     restart: unless-stopped
 
   rpc:

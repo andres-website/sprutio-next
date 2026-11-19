@@ -48,6 +48,9 @@ LOCALES = {
 
 LANGUAGES = ["ru", "en", "de"]
 
+# форк: куда вести после «Выхода» (пусто — обратно на страницу входа)
+LOGOUT_URL = os.getenv("FM_LOGOUT_URL", "")
+
 SETTINGS = {
     "preview_types": [
         "jpg",
