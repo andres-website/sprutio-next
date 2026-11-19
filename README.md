@@ -13,11 +13,11 @@ Thanks to the Sprut.io Team and Beget!
 
 # What's different from the [original](https://github.com/LTD-Beget/sprutio)
 
-- Python 2.7 → Python 3.12
 - Fast search over SFTP (x100+) — text search in 10 000 files in 1 second
 - An address bar for each panel: paste a path and go
 - "Full path" (to the selected file) in one click
 - Drag-and-drop upload of files and folders
+- Python 2.7 → Python 3.12
 
 To stay true to the original, automated tests (API and in-browser E2E) are written against the original UI and logic.
 
