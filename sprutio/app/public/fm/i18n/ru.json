@@ -335,7 +335,6 @@
   "Fast search": "Быстрый поиск",
   "Drop files to upload": "Отпустите файлы, чтобы загрузить их сюда",
   "Upload is not available here": "Сюда загрузить нельзя",
-  "Folders cannot be uploaded by drag and drop yet, skipped: $1": "Папки перетаскиванием пока не загружаются, пропущено: $1",
   "Interface": "Интерфейс",
   "Max retina mode": "Режим max retina",
   "Copied to clipboard": "Скопировано в буфер обмена",
@@ -344,5 +343,7 @@
   "Show the menu": "Показать меню",
   "Hide the menu": "Скрыть меню",
   "Upscaled original icons on Retina/4K screens (test: compare the two methods). Without it the original icons are shown, sharp where a native large version exists.": "Увеличенные оригинальные иконки на экранах Retina/4K (тест: сравните два способа). Без галочки — оригинальные иконки, чёткие там, где есть родная крупная версия.",
-  "Upscaled icons (test)": "Способ увеличения (тест)"
+  "Upscaled icons (test)": "Способ увеличения (тест)",
+  "Creating folders...": "Создаю папки…",
+  "Unable to read the dropped folder: $1": "Не удалось прочитать перетащенную папку: $1"
 }

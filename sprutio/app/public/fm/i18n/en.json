@@ -329,7 +329,6 @@
   "Fast search": "Fast search",
   "Drop files to upload": "Drop files to upload",
   "Upload is not available here": "Upload is not available here",
-  "Folders cannot be uploaded by drag and drop yet, skipped: $1": "Folders cannot be uploaded by drag and drop yet, skipped: $1",
   "Interface": "Interface",
   "Max retina mode": "Max retina mode",
   "Copied to clipboard": "Copied to clipboard",
@@ -338,5 +337,7 @@
   "Show the menu": "Show the menu",
   "Hide the menu": "Hide the menu",
   "Upscaled original icons on Retina/4K screens (test: compare the two methods). Without it the original icons are shown, sharp where a native large version exists.": "Upscaled original icons on Retina/4K screens (test: compare the two methods). Without it the original icons are shown, sharp where a native large version exists.",
-  "Upscaled icons (test)": "Upscaled icons (test)"
+  "Upscaled icons (test)": "Upscaled icons (test)",
+  "Creating folders...": "Creating folders...",
+  "Unable to read the dropped folder: $1": "Unable to read the dropped folder: $1"
 }

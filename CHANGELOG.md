@@ -3,6 +3,7 @@
 Versions follow [Semantic Versioning](https://semver.org/); 0.x — work in progress.
 
 ## [Unreleased]
+- Drag-and-drop upload of folders with their whole structure (nested and empty folders included).
 
 ## [0.5.0] — 2026-11-19 — Server installation
 - Installation on a server: `docker-compose.yml` and `install.sh` — works with the server's own files and users.

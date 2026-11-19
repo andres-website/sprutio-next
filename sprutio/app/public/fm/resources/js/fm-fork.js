@@ -651,9 +651,10 @@
         if (!panel || modalOpen() || !canUpload(panel)) {
             return;
         }
-        // DataTransfer живёт только внутри обработчика — разбираем сразу
+        // DataTransfer живёт только внутри обработчика — разбираем сразу (сами FileSystemEntry живут и дальше)
         var files = [];
-        var skipped = [];
+        var entries = [];
+        var hasDirs = false;
         var items = e.dataTransfer.items;
         var i;
         if (items && items.length) {
@@ -662,12 +663,12 @@
                     continue;
                 }
                 var entry = items[i].webkitGetAsEntry ? items[i].webkitGetAsEntry() : null;
-                if (entry && entry.isDirectory) {
-                    skipped.push(entry.name);
-                    continue;
+                if (entry) {
+                    entries.push(entry);
+                    hasDirs = hasDirs || entry.isDirectory;
                 }
                 var f = items[i].getAsFile();
-                if (f) {
+                if (f && !(entry && entry.isDirectory)) {
                     files.push(f);
                 }
             }
@@ -676,16 +677,67 @@
                 files.push(e.dataTransfer.files[i]);
             }
         }
-        uploadDropped(panel, files, skipped);
+        if (hasDirs) {
+            collectEntries(entries).then(function (tree) {
+                uploadTree(panel, tree.dirs, tree.files);
+            }, function (err) {
+                FM.helpers.ShowError(tr('Unable to read the dropped folder: $1', String(err && err.message || err)));
+            });
+        } else {
+            uploadDropped(panel, files);
+        }
     }, false);
 
-    function uploadDropped(panel, files, skipped) {
-        if (skipped.length) {
-            FM.helpers.ShowWarning(tr('Folders cannot be uploaded by drag and drop yet, skipped: $1', skipped.join(', ')));
+    // --- обход перетащенных папок: {dirs: ['a', 'a/b'], files: [{file, dir: 'a/b'}]} --------------------
+    function readAllEntries(dirEntry) {
+        var reader = dirEntry.createReader();
+        var all = [];
+        return new Promise(function (resolve, reject) {
+            (function next() {
+                // readEntries отдаёт содержимое порциями — читаем, пока не вернёт пустой список
+                reader.readEntries(function (chunk) {
+                    if (!chunk.length) {
+                        resolve(all);
+                        return;
+                    }
+                    all = all.concat(Array.prototype.slice.call(chunk));
+                    next();
+                }, reject);
+            })();
+        });
+    }
+
+    function entryFile(fileEntry) {
+        return new Promise(function (resolve, reject) {
+            fileEntry.file(resolve, reject);
+        });
+    }
+
+    function collectEntries(entries) {
+        var dirs = [];
+        var files = [];
+        function walk(list, prefix) {
+            return list.reduce(function (chain, entry) {
+                return chain.then(function () {
+                    var rel = prefix ? prefix + '/' + entry.name : entry.name;
+                    if (entry.isDirectory) {
+                        dirs.push(rel);
+                        return readAllEntries(entry).then(function (children) {
+                            return walk(children, rel);
+                        });
+                    }
+                    return entryFile(entry).then(function (file) {
+                        files.push({file: file, dir: prefix});
+                    });
+                });
+            }, Promise.resolve());
         }
-        if (!files.length) {
-            return;
-        }
+        return walk(entries, '').then(function () {
+            return {dirs: dirs, files: files};
+        });
+    }
+
+    function newUploadDialog(panel) {
         if (FM.Active !== panel) {
             FM.helpers.SetActivePanel(panel);
         }
@@ -697,10 +749,8 @@
             return w.hasCls && w.hasCls('fm-upload-dialog') && before.indexOf(w) === -1;
         }).pop();
         if (!dialog || !dialog.queue) {
-            return;
+            return null;
         }
-        dialog.queue.clearUploadedItems();
-        dialog.queue.addFiles(files);
         // всё прошло без ошибок — окно закрывается само, как в Проводнике
         dialog.on('uploadcomplete', function (dlg, manager, uploaded, errorCount) {
             if (!errorCount) {
@@ -711,7 +761,108 @@
                 }, 800);
             }
         });
+        return dialog;
+    }
+
+    function uploadDropped(panel, files) {
+        if (!files.length) {
+            return;
+        }
+        var dialog = newUploadDialog(panel);
+        if (!dialog) {
+            return;
+        }
+        dialog.queue.clearUploadedItems();
+        dialog.queue.addFiles(files);
         dialog.onInitUpload();
+    }
+
+    function absPath(session, parent, name) {
+        var s = Ext.apply({}, {path: parent}, session);   // Ext.apply(цель, значения, умолчания)
+        return FM.helpers.GetAbsName(s, FM.model.File.create({name: name}));
+    }
+
+    function mkdir(session, path) {
+        // ошибку («папка уже существует» при повторной загрузке) пропускаем: файлы всё равно лягут в неё
+        return new Promise(function (resolve) {
+            FM.backend.ajaxSend('/actions/files/mkdir', {
+                params: {session: session, path: path},
+                success: function () { resolve(true); },
+                failure: function () { resolve(false); }
+            });
+        });
+    }
+
+    // загрузка папок со структурой: создать папки (родители раньше детей), затем каждый файл — в свою папку
+    function uploadTree(panel, dirs, files) {
+        if (!dirs.length && !files.length) {
+            return Promise.resolve();
+        }
+        if (FM.Active !== panel) {
+            FM.helpers.SetActivePanel(panel);
+        }
+        var session = Ext.ux.Util.clone(panel.session);
+        var base = session.path;
+        var top = {};
+        dirs.forEach(function (d) { top[d.split('/')[0]] = true; });
+        files.forEach(function (f) { if (!f.dir) { top[f.file.name] = true; } });
+        var pseudo = Object.keys(top).map(function (name) { return {get: function () { return name; }}; });
+
+        return new Promise(function (resolve) {
+            FM.helpers.CheckOverwrite(panel, pseudo, function (overwrite) {
+                var abs = {'': base};
+                dirs.slice().sort(function (a, b) {
+                    return a.split('/').length - b.split('/').length;
+                }).forEach(function (d) {
+                    var cut = d.lastIndexOf('/');
+                    var parent = cut === -1 ? '' : d.substring(0, cut);
+                    abs[d] = absPath(session, abs[parent], d.substring(cut + 1));
+                });
+                FM.helpers.SetLoading(panel.body, tr('Creating folders...'));
+                Object.keys(abs).filter(function (d) { return d; }).sort(function (a, b) {
+                    return a.split('/').length - b.split('/').length;
+                }).reduce(function (chain, d) {
+                    return chain.then(function () { return mkdir(session, abs[d]); });
+                }, Promise.resolve()).then(function () {
+                    FM.helpers.UnsetLoading(panel.body);
+                    if (!files.length) {
+                        FM.Actions.Refresh.execute();
+                        resolve();
+                        return;
+                    }
+                    var dialog = newUploadDialog(panel);
+                    if (!dialog) {
+                        resolve();
+                        return;
+                    }
+                    dialog.queue.clearUploadedItems();
+                    var start = dialog.queue.getCount();
+                    dialog.queue.addFiles(files.map(function (f) { return f.file; }));
+                    files.forEach(function (f, i) {
+                        var item = dialog.queue.getAt(start + i);
+                        if (item) {
+                            item.fmTargetPath = abs[f.dir] || base;
+                        }
+                    });
+                    var manager = dialog.uploadManager;
+                    var uploader = manager.uploader;
+                    var originalUpload = uploader.uploadItem;
+                    uploader.uploadItem = function (item) {
+                        // папка назначения — своя у каждого файла (параметр session запроса /upload)
+                        var target = Ext.apply({}, {path: item.fmTargetPath || base}, session);
+                        var encoded = Ext.JSON.encode(target);
+                        manager.extraParams.session = encoded;
+                        uploader.extraParams.session = encoded;
+                        return originalUpload.apply(this, arguments);
+                    };
+                    manager.extraParams.overwrite = overwrite;
+                    uploader.extraParams.overwrite = overwrite;
+                    dialog.stateUpload();
+                    dialog.startUpload();
+                    resolve(dialog);
+                });
+            });
+        });
     }
 
     // для тестов и отладки
@@ -721,6 +872,8 @@
         selectedFullPath: selectedFullPath,
         showFullPath: showFullPath,
         setMenuExpanded: setExpanded,
-        uploadDropped: uploadDropped
+        uploadDropped: uploadDropped,
+        uploadTree: uploadTree,
+        collectEntries: collectEntries
     };
 })();

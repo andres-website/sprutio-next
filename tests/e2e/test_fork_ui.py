@@ -185,15 +185,56 @@ def test_drop_outside_panels_is_swallowed(fm_page):
                             " && w.isVisible()).length") == 0
 
 
-def test_drop_folder_skipped_warning(fm_page, api, work):
+def wait_upload_done(page):
+    """Окно загрузки сначала появляется (после создания папок), потом закрывается само."""
+    page.wait_for_function("() => Ext.ComponentQuery.query('window').some(w => w.hasCls('fm-upload-dialog'))",
+                           timeout=30000)
+    page.wait_for_function("() => !Ext.ComponentQuery.query('window').some(w => w.hasCls('fm-upload-dialog')"
+                           " && !w.isDestroyed && w.isVisible())", timeout=30000)
+
+
+def test_drop_folder_tree(fm_page, api, work):
+    """Папки перетаскиванием: структура сохраняется (вложенные и пустые папки, файлы — каждый в своей)."""
     fm_page.evaluate("p => FM.Actions.Open.execute(FM.Active, p)", work)
     fm_page.wait_for_function("p => FM.Active.session.path === p", arg=work, timeout=15000)
-    fm_page.evaluate("p => FMFork.uploadDropped(FM.Active, [new File(['z'], 'only.txt')], ['folder1'])", None)
-    fm_page.wait_for_selector(".x-window:has-text('folder1')", timeout=10000)
-    fm_page.locator(".x-window:has-text('folder1') .x-btn", has_text="OK").first.click()
-    fm_page.wait_for_function("() => FM.Active.filelist.getStore().findRecord('name', 'only') !== null "
-                              "|| FM.Active.filelist.getStore().getRange().some(r => r.get('name').startsWith('only'))",
-                              timeout=20000)
+    fm_page.evaluate("""() => { FMFork.uploadTree(FM.Active, ['proj', 'proj/src', 'proj/src/deep', 'proj/empty'], [
+        {dir: '', file: new File(['root'], 'top.txt')},
+        {dir: 'proj', file: new File(['readme'], 'README.md')},
+        {dir: 'proj/src', file: new File(['main'], 'main.py')},
+        {dir: 'proj/src/deep', file: new File(['x'], 'x.txt')}]); }""")
+    wait_upload_done(fm_page)
+    names = lambda p: sorted(n for n in api.ls(p) if n != "..")
+    assert {"proj", "top.txt"} <= set(names(work))
+    assert set(names(work + "/proj")) >= {"README.md", "src", "empty"}
+    assert set(names(work + "/proj/src")) >= {"main.py", "deep"}
+    assert api.read(work + "/proj/src/deep/x.txt")["content"] == "x"
+    assert names(work + "/proj/empty") == []
+    # повторно в ту же папку: спрашивает про перезапись, «Да» — файлы обновляются
+    fm_page.evaluate("p => FM.Actions.Open.execute(FM.Active, p)", work)
+    fm_page.wait_for_timeout(1000)
+    fm_page.evaluate("""() => { FMFork.uploadTree(FM.Active, ['proj'], [{dir: 'proj', file: new File(['v2'], 'README.md')}]); }""")
+    fm_page.locator(".x-window .x-btn", has_text="Yes").first.click()
+    wait_upload_done(fm_page)
+    assert api.read(work + "/proj/README.md")["content"] == "v2"
+
+
+def test_collect_dropped_entries(fm_page):
+    """Обход перетащенных папок (FileSystemEntry): вложенность, пустые папки, чтение содержимого порциями."""
+    r = fm_page.evaluate("""async () => {
+        const file = (name) => ({isFile: true, isDirectory: false, name, file: (ok) => ok(new File([name], name))});
+        const dir = (name, children, chunk) => ({isFile: false, isDirectory: true, name, createReader() {
+            let pos = 0;   // как в Chrome: readEntries отдаёт порции, последняя — пустая
+            return {readEntries(ok) { const part = children.slice(pos, pos + chunk); pos += chunk; ok(part); }};
+        }});
+        const many = Array.from({length: 7}, (_, i) => file('f' + i + '.txt'));
+        const tree = await FMFork.collectEntries([
+            file('top.txt'),
+            dir('site', [file('index.php'), dir('css', [file('a.css')], 10), dir('empty', [], 10), dir('big', many, 3)], 2)]);
+        return {dirs: tree.dirs, files: tree.files.map(f => (f.dir ? f.dir + '/' : '') + f.file.name)};
+    }""")
+    assert r["dirs"] == ["site", "site/css", "site/empty", "site/big"]
+    assert r["files"][:3] == ["top.txt", "site/index.php", "site/css/a.css"]
+    assert sorted(f for f in r["files"] if f.startswith("site/big/")) == ["site/big/f%d.txt" % i for i in range(7)]
 
 
 # --- retina ---------------------------------------------------------------------------------------

@@ -17,7 +17,7 @@ Thanks to the Sprut.io Team and Beget!
 - Fast search over SFTP (x100+) — text search in 10 000 files in 1 second
 - An address bar for each panel: paste a path and go
 - "Full path" (to the selected file) in one click
-- Drag-and-drop file upload
+- Drag-and-drop upload of files and folders
 
 To stay true to the original, automated tests (API and in-browser E2E) are written against the original UI and logic.
 
@@ -65,7 +65,7 @@ Log in at `https://<server-address>:9443` as `fmtest` with the `FM_TEST_PASS` pa
   Ctrl+L / Alt+D to focus. The ▾ button temporarily slides the original menu out below them.
 - "Full path" button: copies the full path of the selected file to the clipboard and shows it
   so you can select a part of it.
-- Drag and drop files from your computer onto a panel to upload them into its current folder.
+- Drag and drop files and folders from your computer onto a panel to upload them into its current folder; folders keep their structure.
 - Sharper icons on Retina/4K screens where a native large version of the same artwork exists;
   an optional "Max retina mode" (Settings → Interface) for upscaled or custom icons.
 

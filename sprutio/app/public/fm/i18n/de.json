@@ -333,7 +333,6 @@
   "Fast search": "Schnellsuche",
   "Drop files to upload": "Dateien zum Hochladen hier ablegen",
   "Upload is not available here": "Hochladen ist hier nicht möglich",
-  "Folders cannot be uploaded by drag and drop yet, skipped: $1": "Ordner können noch nicht per Drag & Drop hochgeladen werden, übersprungen: $1",
   "Interface": "Oberfläche",
   "Max retina mode": "Max-Retina-Modus",
   "Copied to clipboard": "In die Zwischenablage kopiert",
@@ -342,5 +341,7 @@
   "Show the menu": "Menü anzeigen",
   "Hide the menu": "Menü ausblenden",
   "Upscaled original icons on Retina/4K screens (test: compare the two methods). Without it the original icons are shown, sharp where a native large version exists.": "Hochskalierte Originalsymbole auf Retina/4K-Bildschirmen (Test: beide Verfahren vergleichen). Ohne diese Option werden die Originalsymbole angezeigt.",
-  "Upscaled icons (test)": "Hochskalierung (Test)"
+  "Upscaled icons (test)": "Hochskalierung (Test)",
+  "Creating folders...": "Ordner werden erstellt…",
+  "Unable to read the dropped folder: $1": "Der abgelegte Ordner konnte nicht gelesen werden: $1"
 }
