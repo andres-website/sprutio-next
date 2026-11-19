@@ -1,4 +1,4 @@
-# sprutio-next
+# Sprutio Next — Open Source File Manager (fork of Sprut.io)
 
 Revived two-panel web file manager — fork of Beget's [Sprutio](https://github.com/LTD-Beget/sprutio).
 
