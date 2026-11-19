@@ -2,7 +2,7 @@
 
 <sub>fork of Sprut.io file manager</sub>
 
-Возрождённый двухпанельный веб-файловый менеджер — форк [Sprutio](https://github.com/LTD-Beget/sprutio) от Beget.
+Двухпанельный веб-файловый менеджер — форк [Sprutio](https://github.com/LTD-Beget/sprutio) от Beget.
 
 **Неофициальный.** С ООО «Бегет» не связан и им не одобрен. Форк переводит Sprutio на современный стек
 и развивает на свой вкус. [English](README.md)

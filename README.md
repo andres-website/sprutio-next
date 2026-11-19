@@ -2,7 +2,7 @@
 
 <sub>fork of Sprut.io file manager</sub>
 
-Revived two-panel web file manager — fork of Beget's [Sprutio](https://github.com/LTD-Beget/sprutio).
+Two-panel web file manager — fork of Beget's [Sprutio](https://github.com/LTD-Beget/sprutio).
 
 **Unofficial.** Not affiliated with or endorsed by Beget LLC. This fork brings Sprutio to a current stack
 and develops it to the author's taste.
