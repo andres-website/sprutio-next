@@ -12,7 +12,7 @@ and develops it to the author's taste.
 - Fast search over SFTP (x100+) — text search in 10 000 files in 1 second
 - An address bar for each panel: paste a path and go
 - "Full path" (to the selected file) in one click
-- Drag-and-drop upload
+- Drag-and-drop file upload
 - 138 automated tests that also run against the original
 
 ## Installation
