@@ -131,3 +131,10 @@ html .fm-settings-hint {
   line-height: 16px;
   margin: 2px 0 0 22px;
 }
+
+/* --- главная панель кнопок: на экранах высокой плотности ExtJS занижает ширину группы кнопок
+   (overflow: hidden) и последняя подпись обрезается — показываем группу целиком ------------------- */
+html #fm-main-buttons-toolbar .x-btn-group,
+html #fm-main-buttons-toolbar .x-btn-group-body {
+  overflow: visible !important;
+}

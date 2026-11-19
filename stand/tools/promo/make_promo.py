@@ -70,6 +70,8 @@ def shot(browser, creds, left, right, viewport, dpr):
     p.goto(BASE + '/?language=ru')
     p.wait_for_selector('.fm-file-list-panel .x-grid-item', timeout=45000)
     p.wait_for_function("document.getElementById('fm-fork-path-Left')", timeout=30000)
+    # на случай, если стенд ещё на старых образах: та же правка, что в fm-fork.css (группа кнопок без обрезки)
+    p.add_style_tag(content='#fm-main-buttons-toolbar .x-btn-group, #fm-main-buttons-toolbar .x-btn-group-body { overflow: visible !important; }')
     for side, path in (('Right', right), ('Left', left)):
         p.evaluate('([s, d]) => FM.Actions.Open.execute(FM[s], d)', [side, path])
         p.wait_for_function('([s, d]) => FM[s].session.path === d', arg=[side, path], timeout=15000)
