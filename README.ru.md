@@ -5,6 +5,10 @@
 **Неофициальный.** С ООО «Бегет» не связан и им не одобрен. Форк переводит Sprutio на современный стек
 и развивает на свой вкус. [English](README.md)
 
+![sprutio-next](promo/sprutio-next-ui.png)
+
+Спасибо Sprut.io Team и Beget!
+
 # Отличия от [оригинала](https://github.com/LTD-Beget/sprutio)
 
 - Python 2.7 → Python 3.12
