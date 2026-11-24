@@ -346,5 +346,6 @@
   "Upscaled icons (test)": "Способ увеличения (тест)",
   "Creating folders...": "Создаю папки…",
   "Unable to read the dropped folder: $1": "Не удалось прочитать перетащенную папку: $1",
-  "Open this folder in the other panel": "Открыть эту папку в другой панели"
+  "Open this folder in the other panel": "Открыть эту папку в другой панели",
+  "Broken link": "Битая ссылка"
 }

@@ -154,6 +154,36 @@ def test_mirror_folder_to_other_panel(fm_page, api):
     assert inp(fm_page, "Right").input_value() == api.home + "/site"
 
 
+def test_symlinks_open(fm_page, api, work):
+    """Двойной клик по симлинку: ссылка на папку открывает цель, на файл — редактор, битая — ошибка."""
+    sandbox = os.path.join(os.path.dirname(__file__), "..", "..", "stand", "sandbox-root")
+    host = lambda p: os.path.join(sandbox, p.lstrip("/"))
+    api.mkdir(work + "/real")
+    api.newfile(work + "/real/note.txt")
+    api.write(work + "/real/note.txt", "linked content")
+    os.symlink(work + "/real", host(work + "/to_dir"))            # абсолютная цель
+    os.symlink("real/note.txt", host(work + "/to_file"))
+    os.symlink("/nowhere", host(work + "/broken"))
+    fm_page.evaluate("p => FM.Actions.Open.execute(FM.Left, p)", work)
+    fm_page.wait_for_function("p => FM.Left.session.path === p && FM.Left.filelist.store.getCount() > 3",
+                              arg=work, timeout=15000)
+    dbl = "n => { const p = FM.Left, r = p.filelist.store.findRecord('name', n, 0, false, true, true);" \
+          " p.filelist.getView().fireEvent('itemdblclick', p.filelist.getView(), r); }"
+    fm_page.evaluate(dbl, "to_dir")
+    fm_page.wait_for_function("p => FM.Left.session.path === p", arg=work + "/real", timeout=15000)
+    fm_page.evaluate("p => FM.Actions.Open.execute(FM.Left, p)", work)
+    fm_page.wait_for_function("p => FM.Left.session.path === p && FM.Left.filelist.store.getCount() > 3",
+                              arg=work, timeout=15000)
+    fm_page.evaluate(dbl, "to_file")
+    fm_page.wait_for_function("() => Ext.ComponentQuery.query('editor-window').length > 0", timeout=15000)
+    content = fm_page.evaluate("() => Ext.ComponentQuery.query('editor-window')[0].fileContent")
+    assert content == "linked content"
+    fm_page.evaluate("() => Ext.ComponentQuery.query('editor-window').forEach(w => w.close())")
+    fm_page.evaluate(dbl, "broken")
+    fm_page.wait_for_function("() => Array.from(document.querySelectorAll('.x-window')).some("
+                              "w => w.offsetParent && /nowhere/.test(w.textContent))", timeout=10000)
+
+
 def test_logout_url(fm_page):
     """«Выход» ведёт на FM_LOGOUT_URL, если он задан (window.FM_LOGOUT_URL из app.html)."""
     assert fm_page.evaluate("window.FM_LOGOUT_URL") == ""

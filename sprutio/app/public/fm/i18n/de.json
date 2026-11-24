@@ -344,5 +344,6 @@
   "Upscaled icons (test)": "Hochskalierung (Test)",
   "Creating folders...": "Ordner werden erstellt…",
   "Unable to read the dropped folder: $1": "Der abgelegte Ordner konnte nicht gelesen werden: $1",
-  "Open this folder in the other panel": "Diesen Ordner im anderen Fenster öffnen"
+  "Open this folder in the other panel": "Diesen Ordner im anderen Fenster öffnen",
+  "Broken link": "Defekter Link"
 }

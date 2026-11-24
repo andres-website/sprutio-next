@@ -133,8 +133,38 @@ class BaseWorker(Process):
             'group': group,
             'hash': preview_hash
         }
+        if is_link:
+            result.update(self._link_info(target_path))
 
         return result
+
+    @staticmethod
+    def _link_info(link_path, root=ROOT_MOUNT):
+        """Куда ведёт симлинк: link_target (как записан), link_type (dir/file/broken),
+        link_resolved — путь цели в координатах пользователя ('/home/u/...').
+        Абсолютные цели разрешаются от смонтированного корня (root), а не от корня контейнера rpc;
+        выход за корень считается битой ссылкой."""
+        info = {'link_target': '', 'link_type': 'broken', 'link_resolved': ''}
+        root = os.path.normpath(root)
+        try:
+            info['link_target'] = os.readlink(link_path)
+            p = link_path
+            for _ in range(40):
+                if not os.path.islink(p):
+                    break
+                t = os.readlink(p)
+                p = os.path.normpath(os.path.join(root, t.lstrip('/')) if t.startswith('/')
+                                     else os.path.join(os.path.dirname(p), t))
+                if p != root and not p.startswith(root + '/'):
+                    return info
+            else:
+                return info
+            st = os.stat(p)
+            info['link_type'] = 'dir' if stat.S_ISDIR(st.st_mode) else 'file'
+            info['link_resolved'] = '/' + os.path.relpath(p, root) if p != root else '/'
+        except Exception:
+            pass
+        return info
 
     def _get_pw_by_uid(self, uid):
         if uid not in self.PWS:

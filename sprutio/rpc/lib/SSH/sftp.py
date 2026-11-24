@@ -111,6 +111,17 @@ class SFTP(SSH):
             'hash': preview_hash
         }
 
+        if is_link:
+            # Куда ведёт ссылку разрешает сам сервер (sftp stat следует по ссылке).
+            file_info.update({'link_target': '', 'link_type': 'broken', 'link_resolved': ''})
+            try:
+                file_info['link_target'] = self.sftp.readlink(file_path) or ''
+                st = self.sftp.stat(file_path)
+                file_info['link_type'] = 'dir' if stat.S_ISDIR(st.st_mode) else 'file'
+                file_info['link_resolved'] = self.sftp.normalize(file_path)
+            except Exception:
+                pass
+
         return file_info
 
     def get_home_dir(self, cache={}):

@@ -340,6 +340,65 @@
         FM.File.MAX_SIZE = 20 * 1024 * 1024;
     })();
 
+    // --- симлинки: двойной клик / Enter открывают цель ------------------------------------------------
+    // Оригинал игнорирует ссылки. rpc форка отдаёт link_type (dir/file/broken), link_target и link_resolved.
+    // Домашний сервер: rpc видит корень хоста под /mnt, поэтому абсолютная ссылка верна только как
+    // link_resolved — открываем по нему. SFTP: сервер сам ходит по ссылке — открываем путь ссылки.
+    function openLink(panel, record) {
+        var type = record.get('link_type') || record.data.link_type;
+        var resolved = record.data.link_resolved;
+        var isHome = panel.session && panel.session.type === FM.Session.HOME;
+        if (type === 'broken') {
+            FM.helpers.ShowError(tr('Broken link') + ': ' + (record.data.link_target || record.get('name')));
+            return;
+        }
+        if (!type || type === 'dir') {      // без сведений о цели — как в Beget: пробуем открыть как папку
+            FM.Actions.Open.execute(panel, isHome && resolved ? resolved : FM.helpers.GetAbsName(panel.session, record));
+            return;
+        }
+        var target = record.copy();
+        target.set('is_link', false);
+        var proxy = panel;
+        if (isHome && resolved) {
+            var cut = resolved.lastIndexOf('/');
+            var name = resolved.slice(cut + 1);
+            target.set('name', name);
+            target.set('ext', (name.lastIndexOf('.') > 0 ? name.slice(name.lastIndexOf('.') + 1) : '').toLowerCase());
+            proxy = Object.create(panel);
+            proxy.session = Ext.apply({}, panel.session);
+            proxy.session.path = resolved.slice(0, cut) || '/';
+        }
+        FM.Actions.OpenFile.execute(proxy, target);
+    }
+
+    (function patchLinks() {
+        if (!(window.FM && FM.Actions && FM.Actions.OpenFile && FM.Actions.OpenFile.initialConfig && FM.Actions.OpenFile.initialConfig.handler && FM.Left && FM.Right &&
+              FM.Left.filelist && FM.Right.filelist)) {
+            setTimeout(patchLinks, 200);
+            return;
+        }
+        var orig = FM.Actions.OpenFile.initialConfig.handler;
+        FM.Actions.OpenFile.setHandler(function (panel, record) {
+            if (record && record.get('is_link')) {
+                return openLink(panel, record);
+            }
+            return orig.apply(this, arguments);
+        });
+        [FM.Left, FM.Right].forEach(function (panel) {
+            var view = panel.filelist.getView();
+            view.on('itemmouseenter', function (v, record, item) {
+                if (record.get('is_link') && record.data.link_target) {
+                    item.title = record.get('name') + ' → ' + record.data.link_target;
+                }
+            });
+            view.on('itemkeydown', function (v, record, item, index, e) {
+                if (e.getKey() === Ext.event.Event.ENTER && record.get('is_link')) {
+                    openLink(panel, record);
+                }
+            });
+        });
+    })();
+
     // --- «Весь путь» -----------------------------------------------------------------------------------
     var fullPathPopup = null;
 
@@ -929,6 +988,7 @@
         uploadDropped: uploadDropped,
         uploadTree: uploadTree,
         mirrorToOtherPanel: mirrorToOtherPanel,
-        collectEntries: collectEntries
+        collectEntries: collectEntries,
+        openLink: openLink
     };
 })();
