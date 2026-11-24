@@ -37,7 +37,9 @@ class ErrorReturnCode(Exception):
         self.exit_code = exit_code
         tstdout = self.stdout if self.stdout is not None else "<redirected>"
         tstderr = self.stderr if self.stderr is not None else "<redirected>"
-        self.message = None
+        self.message = "Command '%s' failed on %s@%s (exit code %s): %s" % (
+            full_cmd, username, hostname, exit_code,
+            (tstderr.decode(errors="replace") if isinstance(tstderr, bytes) else tstderr).strip()[:500])
         super(ErrorReturnCode, self).__init__(full_cmd, stdout, stderr, exit_code, hostname, username, port)
 
     def __str__(self):

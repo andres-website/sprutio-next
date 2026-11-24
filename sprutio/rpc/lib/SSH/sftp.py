@@ -140,12 +140,18 @@ class SFTP(SSH):
         :return:
         :rtype: str
         """
-        if uid not in cache:
-            res = self.run("getent passwd {}".format(uid))
-            cache[uid] = res.stdout.decode().split(":", 1)[0]
-            return res.stdout.decode().split(":", 1)[0]
-        else:
-            return cache[uid]
+        # Ключ с хостом: один uid на разных серверах — разные пользователи. uid без записи в passwd
+        # (файлы из docker-контейнеров и т.п.) или сервер без shell — показываем число, как ls -l,
+        # вместо падения всего листинга.
+        key = (self.hostname, self.port, uid)
+        if key not in cache:
+            try:
+                res = self.run("getent passwd {}".format(int(uid)))
+                name = res.stdout.decode().split(":", 1)[0].strip()
+            except Exception:
+                name = ""
+            cache[key] = name or str(uid)
+        return cache[key]
 
     def getmode(self, info):
         try:

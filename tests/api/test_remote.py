@@ -125,6 +125,22 @@ def test_sftp_root_is_root(remote):
     assert {"etc", "usr"} <= names
 
 
+@pytest.mark.orig_differs(strict=False)
+def test_sftp_unknown_owner(remote, rwork):
+    if remote.kind != "sftp":
+        pytest.skip("только SFTP")
+    import subprocess
+    remote.touch(rwork + "/orphan.txt", "x")
+    sh = lambda c: subprocess.run(["docker", "exec", "sprutio-sshd-1", "sh", "-c", c],
+                                  capture_output=True, text=True, timeout=60)
+    home = sh("getent passwd %s | cut -d: -f6" % conn_params("sftp")["user"]).stdout.strip()
+    target = rwork if rwork.startswith("/") else home + "/" + rwork.lstrip("./")
+    r = sh("chown 4242:4242 '%s/orphan.txt'" % target)
+    assert r.returncode == 0, r.stderr
+    items = remote.ls(rwork)
+    assert items["orphan.txt"]["owner"] == "4242"
+
+
 def test_mkdir_write_read(remote, rwork):
     remote.mkdir(rwork + "/sub")
     remote.touch(rwork + "/index.html", CYR)
