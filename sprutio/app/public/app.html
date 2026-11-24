@@ -47,9 +47,24 @@
     <script src="/lib/jquery.i18n/src/jquery.i18n.language.js"></script>
     <script src="/lib/jquery.i18n/src/languages/ru.js"></script>
     <script src="/fm/resources/js/vendor/emmet-core-master/emmet.js"></script>
-    <script src="/lib/ace-builds/src-min-noconflict/ace.js"></script>
-    <script src="/lib/ace-builds/src-min-noconflict/ext-language_tools.js"></script>
-    <script src="/lib/ace-builds/src-min-noconflict/ext-emmet.js"></script>
+    <script>
+        // форк: версия редактора. По умолчанию — родной Ace 1.2.0; новый Ace (+ проверка кода, ИИ-подсказки) —
+        // по галочке Настройки → «Редактор+» (localStorage 'fm-fork-ace-next' = '1'), применяется после перезагрузки.
+        (function () {
+            var next = false;
+            try { next = window.localStorage.getItem('fm-fork-ace-next') === '1'; } catch (e) {}
+            window.FM_ACE_NEXT = next;
+            var base = next ? '/lib/ace-builds-next/src-min-noconflict/' : '/lib/ace-builds/src-min-noconflict/';
+            var files = [base + 'ace.js', base + 'ext-language_tools.js', base + 'ext-emmet.js'];
+            if (next) {
+                files.push(base + 'ext-inline_autocomplete.js', '/lib/ace-linters/build/ace-linters.js?v=2.2.2',
+                           '/fm/resources/js/fm-ace-next.js?v=1');
+            }
+            for (var i = 0; i < files.length; i++) {
+                document.write('<script src="' + files[i] + '"><\/script>');
+            }
+        })();
+    </script>
 
     <script>
         $.i18n({
@@ -83,7 +98,7 @@
                     $('<script type="text/javascript" src="/fm/loader.js"><\/script>').appendTo(body);
 {% end %}
                     // форк: дополнения интерфейса без пересборки (быстрый поиск и др.)
-                    $('<script type="text/javascript" src="/fm/resources/js/fm-fork.js?v=12"><\/script>').appendTo(body);
+                    $('<script type="text/javascript" src="/fm/resources/js/fm-fork.js?v=13"><\/script>').appendTo(body);
 
 //                    $('<div id="applet_right_embed">' +
 //                        '<applet jnlp_href="/fm/resources/applet.jnlp" archive="/static/app/begetfm.jar" code="begetfm.begetfm" id="applet_right">' +

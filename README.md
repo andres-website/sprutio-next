@@ -17,6 +17,7 @@ Thanks to the Sprut.io Team and Beget!
 - An address bar for each panel: paste a path and go
 - "Full path" (to the selected file) in one click
 - Drag-and-drop upload of files and folders
+- Optional new editor: code checking and AI suggestions (Ollama or an OpenAI-compatible API)
 - Python 2.7 → Python 3.12
 
 To stay true to the original, automated tests (API and in-browser E2E) are written against the original UI and logic.
@@ -39,6 +40,11 @@ Open `https://<server-address>:9443` and log in with the username and password o
 - Update: `git pull && sudo ./install.sh`. Stop: `sudo ./install.sh stop`, logs: `sudo ./install.sh logs`.
 - Your own address for the Logout button (e.g. a hosting panel): `sudo FM_LOGOUT_URL=https://example.com ./install.sh`.
 - Another port: `sudo FM_HTTPS_PORT=8443 ./install.sh`. The port is open to everyone — restrict it with a firewall if needed.
+- AI suggestions "via the server" (OpenAI-compatible API; the key stays on the server):
+  `sudo FM_AI_BASE_URL=https://api.openai.com/v1 FM_AI_MODEL=<model> FM_AI_API_KEY=<key> ./install.sh`.
+  Ollama on the same server (started with `OLLAMA_HOST=0.0.0.0`):
+  `FM_AI_BASE_URL=http://host.docker.internal:11434/v1 FM_AI_MODEL=qwen2.5-coder:1.5b`.
+  `FM_AI_API=chat` — for models without FIM (uses /chat/completions).
 
 ### Try it without server access
 
@@ -72,6 +78,13 @@ Log in at `https://<server-address>:9443` as `fmtest` with the `FM_TEST_PASS` pa
 - Drag and drop files and folders from your computer onto a panel to upload them into its current folder; folders keep their structure.
 - Sharper icons on Retina/4K screens where a native large version of the same artwork exists;
   an optional "Max retina mode" (Settings → Interface) for upscaled or custom icons.
+
+**Editor** (Settings → "Editor+", off by default — the original Ace 1.2 stays)
+- New Ace 1.45 with code checking (ace-linters: JS/TS, PHP, CSS/SCSS/LESS, HTML, JSON, YAML, XML, Lua) — errors
+  and hints right in the text. The editor switches after a page reload.
+- AI suggestions as grey text after the cursor: Tab — accept, Ctrl+→ — accept a word, Esc — dismiss, Alt+\ — ask.
+  Source: Ollama straight from the browser (your own computer, `OLLAMA_ORIGINS=https://<server>:9443`) or
+  an OpenAI-compatible API via the server (`FM_AI_*`). Qwen2.5-Coder 1.5B/3B/7B work well, for example.
 
 ## Repository layout
 

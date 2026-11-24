@@ -10,6 +10,9 @@ Versions follow [Semantic Versioning](https://semver.org/); 0.x — work in prog
 - Drag-and-drop upload of folders with their whole structure (nested and empty folders included).
 - Symlinks: double click or Enter opens the target folder or file; the target is shown on hover.
 - Remote servers: "/" opens the server root; folders with files of unknown owners open (owner shown as uid).
+- New editor (Settings → Editor+, off by default — the original Ace 1.2 stays): Ace 1.45 with code checking
+  (ace-linters: JS/TS, PHP, CSS/SCSS/LESS, HTML, JSON, YAML, XML, Lua) and AI suggestions as grey text
+  (Tab — accept): Ollama straight from the browser or any OpenAI-compatible API via the server (`FM_AI_*`).
 
 ## [0.5.0] — 2026-11-19 — Server installation
 - Installation on a server: `docker-compose.yml` and `install.sh` — works with the server's own files and users.

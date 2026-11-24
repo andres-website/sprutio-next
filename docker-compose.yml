@@ -40,6 +40,13 @@ services:
     env_file: ./sprutio/app.env
     environment:
       FM_LOGOUT_URL: ${FM_LOGOUT_URL:-}     # куда вести после «Выхода»; пусто — на страницу входа
+      # ИИ-подсказки в новом редакторе «через сервер» (OpenAI-совместимый API); пусто — выключены
+      FM_AI_BASE_URL: ${FM_AI_BASE_URL:-}   # https://api.openai.com/v1, http://host.docker.internal:11434/v1 …
+      FM_AI_MODEL: ${FM_AI_MODEL:-}
+      FM_AI_API_KEY: ${FM_AI_API_KEY:-}
+      FM_AI_API: ${FM_AI_API:-completions}  # completions (FIM: prompt + suffix) | chat
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  # Ollama/llama.cpp на самом сервере
     restart: unless-stopped
 
   rpc:

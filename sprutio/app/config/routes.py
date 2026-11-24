@@ -40,6 +40,7 @@ from handlers.actions.sftp import SftpUpdateConnectionHandler
 from handlers.actions.webdav import WebDavCreateConnectionHandler
 from handlers.actions.webdav import WebDavRemoveConnectionHandler
 from handlers.actions.webdav import WebDavUpdateConnectionHandler
+from handlers.fork import AiHandler
 
 HANDLERS = [
     (r"/", MainHandler.MainHandler),
@@ -84,5 +85,8 @@ HANDLERS = [
     (r"/actions/sftp/remove", SftpRemoveConnectionHandler.SftpRemoveConnectionHandler),
     (r"/actions/webdav/create", WebDavCreateConnectionHandler.WebDavCreateConnectionHandler),
     (r"/actions/webdav/update", WebDavUpdateConnectionHandler.WebDavUpdateConnectionHandler),
-    (r"/actions/webdav/remove", WebDavRemoveConnectionHandler.WebDavRemoveConnectionHandler)
+    (r"/actions/webdav/remove", WebDavRemoveConnectionHandler.WebDavRemoveConnectionHandler),
+    # форк: ИИ-подсказки в редакторе (OpenAI-совместимый API, настройки FM_AI_* в окружении)
+    (r"/fork/ai/status", AiHandler.AiStatusHandler),
+    (r"/fork/ai/complete", AiHandler.AiCompleteHandler)
 ]

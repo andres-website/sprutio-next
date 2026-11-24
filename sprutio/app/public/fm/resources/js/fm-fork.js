@@ -224,6 +224,217 @@
     });
 
     // =================================================================================================
+    // «Редактор+»: новый Ace (1.45) по галочке — по умолчанию родной Ace 1.2.0. Версия выбирается в app.html
+    // при загрузке страницы, поэтому переключение — после перезагрузки. Проверка кода и ИИ-подсказки
+    // работают только в новом редакторе (fm-ace-next.js).
+    // =================================================================================================
+
+    var ACE_NEXT_KEY = 'fm-fork-ace-next';
+    var ACE_LINT_KEY = 'fm-fork-ace-lint';
+    var AI_KEY = 'fm-fork-ai';
+    var AI_DEFAULTS = {provider: 'off', auto: true, delay: 600,
+                       ollamaUrl: 'http://localhost:11434', ollamaModel: 'qwen2.5-coder:1.5b'};
+
+    function lsGet(key) {
+        try { return window.localStorage.getItem(key); } catch (e) { return null; }
+    }
+
+    function lsSet(key, value) {
+        try { window.localStorage.setItem(key, value); } catch (e) { /* только до перезагрузки */ }
+    }
+
+    function storedAceNext() { return lsGet(ACE_NEXT_KEY) === '1'; }
+
+    function storedLint() { return lsGet(ACE_LINT_KEY) !== '0'; }
+
+    function storedAi() {
+        var out = {}, k, saved = {};
+        try { saved = JSON.parse(lsGet(AI_KEY) || '{}') || {}; } catch (e) { saved = {}; }
+        for (k in AI_DEFAULTS) {
+            if (AI_DEFAULTS.hasOwnProperty(k)) {
+                out[k] = saved.hasOwnProperty(k) ? saved[k] : AI_DEFAULTS[k];
+            }
+        }
+        return out;
+    }
+
+    function aiServerStatus(cmp) {
+        if (!cmp) {
+            return;
+        }
+        cmp.update(tr('Server: checking…'));
+        $.ajax('/fork/ai/status', {
+            dataType: 'json',
+            success: function (data) {
+                if (cmp.isDestroyed) { return; }
+                cmp.update(data && data.enabled
+                    ? tr('Server: $1 ($2)', Ext.String.htmlEncode(data.model || '?'), Ext.String.htmlEncode(data.api || ''))
+                    : tr('Server: not configured (FM_AI_BASE_URL, FM_AI_MODEL in the app environment)'));
+            },
+            error: function () {
+                if (!cmp.isDestroyed) { cmp.update(tr('Server: unavailable')); }
+            }
+        });
+    }
+
+    whenDefined('FM.view.forms.SettingsForm', function (cls) {
+        var proto = cls.prototype;
+        if (proto.__fmForkAceNext) {
+            return;
+        }
+        proto.__fmForkAceNext = true;
+        var originalInit = proto.initComponent;
+        proto.initComponent = function () {
+            originalInit.apply(this, arguments);
+            var tabs = this.down('tabpanel');
+            if (!tabs) {
+                return;
+            }
+            var ai = storedAi();
+            tabs.add({
+                title: tr('Editor+'),
+                bodyPadding: 10,
+                border: false,
+                autoScroll: true,
+                cls: 'fm-fork-editor-plus',
+                defaults: {labelWidth: 150},
+                items: [{
+                    xtype: 'checkbox',
+                    name: 'fm_fork_ace_next',
+                    boxLabel: tr('New editor (Ace $1): code checking and AI suggestions', '1.45'),
+                    checked: storedAceNext()
+                }, {
+                    xtype: 'component',
+                    cls: 'fm-settings-hint',
+                    margin: '0 0 8 22',
+                    html: tr('By default the original editor (Ace 1.2) is used. The editor is switched after the page reloads.')
+                }, {
+                    xtype: 'checkbox',
+                    name: 'fm_fork_ace_lint',
+                    boxLabel: tr('Code checking (JS/TS, PHP, CSS/SCSS/LESS, HTML, JSON, YAML, XML, Lua)'),
+                    checked: storedLint()
+                }, {
+                    xtype: 'radiogroup',
+                    fieldLabel: tr('AI suggestions'),
+                    columns: 1,
+                    margin: '8 0 0 0',
+                    items: [
+                        {boxLabel: tr('Off'), name: 'fm_fork_ai_provider', inputValue: 'off',
+                         checked: ai.provider === 'off'},
+                        {boxLabel: tr('Via the server (OpenAI-compatible API)'), name: 'fm_fork_ai_provider',
+                         inputValue: 'server', checked: ai.provider === 'server'},
+                        {boxLabel: tr('Ollama from the browser'), name: 'fm_fork_ai_provider', inputValue: 'ollama',
+                         checked: ai.provider === 'ollama'}
+                    ]
+                }, {
+                    xtype: 'component',
+                    cls: 'fm-settings-hint fm-fork-ai-server-status',
+                    margin: '0 0 6 155',
+                    html: ''
+                }, {
+                    xtype: 'textfield',
+                    name: 'fm_fork_ai_ollama_url',
+                    fieldLabel: tr('Ollama address'),
+                    width: 420,
+                    value: ai.ollamaUrl
+                }, {
+                    xtype: 'textfield',
+                    name: 'fm_fork_ai_ollama_model',
+                    fieldLabel: tr('Ollama model'),
+                    width: 420,
+                    value: ai.ollamaModel
+                }, {
+                    xtype: 'checkbox',
+                    name: 'fm_fork_ai_auto',
+                    boxLabel: tr('Suggest while typing (otherwise only Alt+\\)'),
+                    margin: '0 0 0 155',
+                    checked: ai.auto !== false
+                }, {
+                    xtype: 'component',
+                    cls: 'fm-settings-hint',
+                    margin: '6 0 0 0',
+                    html: tr('Grey text after the cursor: Tab — accept, Ctrl+→ — accept a word, Esc — dismiss. For Ollama allow this site: OLLAMA_ORIGINS=$1', Ext.String.htmlEncode(window.location.origin))
+                }]
+            });
+        };
+    });
+
+    function readAceNextForm(win) {
+        function q(sel) { return Ext.ComponentQuery.query(sel, win)[0]; }
+        var next = q('checkbox[name=fm_fork_ace_next]');
+        if (!next) {
+            return null;
+        }
+        var radio = q('radio[name=fm_fork_ai_provider]');
+        return {
+            next: next.getValue(),
+            lint: q('checkbox[name=fm_fork_ace_lint]').getValue(),
+            ai: {
+                provider: (radio && radio.getGroupValue()) || 'off',
+                auto: q('checkbox[name=fm_fork_ai_auto]').getValue(),
+                delay: storedAi().delay,
+                ollamaUrl: Ext.String.trim(q('textfield[name=fm_fork_ai_ollama_url]').getValue() || '') || AI_DEFAULTS.ollamaUrl,
+                ollamaModel: Ext.String.trim(q('textfield[name=fm_fork_ai_ollama_model]').getValue() || '') || AI_DEFAULTS.ollamaModel
+            }
+        };
+    }
+
+    whenDefined('FM.view.windows.SettingsWindow', function (cls) {
+        var proto = cls.prototype;
+        if (proto.__fmForkAceNext) {
+            return;
+        }
+        proto.__fmForkAceNext = true;
+        var originalInit = proto.initComponent;
+        proto.initComponent = function () {
+            originalInit.apply(this, arguments);
+            var win = this;
+            win.on('beforeshow', function () {
+                function q(sel) { return Ext.ComponentQuery.query(sel, win)[0]; }
+                var ai = storedAi();
+                var cb = q('checkbox[name=fm_fork_ace_next]');
+                if (cb) {
+                    cb.setValue(storedAceNext());
+                    q('checkbox[name=fm_fork_ace_lint]').setValue(storedLint());
+                    q('checkbox[name=fm_fork_ai_auto]').setValue(ai.auto !== false);
+                    q('textfield[name=fm_fork_ai_ollama_url]').setValue(ai.ollamaUrl);
+                    q('textfield[name=fm_fork_ai_ollama_model]').setValue(ai.ollamaModel);
+                    var r = q('radio[name=fm_fork_ai_provider][inputValue=' + ai.provider + ']');
+                    if (r) { r.setValue(true); }
+                    aiServerStatus(q('component[cls~=fm-fork-ai-server-status]'));
+                }
+            });
+            if (win.save_btn) {
+                // настройки браузерные (localStorage), на сервер не уходят — применяем по «Сохранить»
+                win.save_btn.on('click', function () {
+                    var v = readAceNextForm(win);
+                    if (!v) {
+                        return;
+                    }
+                    var wasNext = storedAceNext();
+                    var wasLint = storedLint();
+                    lsSet(ACE_NEXT_KEY, v.next ? '1' : '0');
+                    lsSet(ACE_LINT_KEY, v.lint ? '1' : '0');
+                    lsSet(AI_KEY, JSON.stringify(v.ai));
+                    var needReload = v.next !== wasNext || (v.next && v.lint !== wasLint);
+                    if (needReload && Ext.ClassManager.get('FM.view.windows.QuestionWindow')) {
+                        Ext.create('FM.view.windows.QuestionWindow', {
+                            title: tr('Editor+'),
+                            msg: tr('The editor will be switched after the page reloads.<br/>Reload now?'),
+                            buttonsPreset: 'YES_NO',
+                            yes: function () { window.location.reload(); },
+                            no: function () { return true; }
+                        }).show();
+                    }
+                });
+            }
+        };
+    });
+
+    window.FMFork = window.FMFork || {};
+    window.FMFork.aceNext = {stored: storedAceNext, lint: storedLint, ai: storedAi};
+
+    // =================================================================================================
     // Строка пути: оригинальные хлебные крошки на панелях не трогаем. Поверх верхней чёрной полосы
     // (главное меню) — своя полоса с двумя обычными инпутами, каждый над своей панелью (как букмарклет
     // extra_sprut_io). Кнопка ▾ временно выдвигает оригинальное меню вниз, под инпуты.
@@ -979,7 +1190,7 @@
     }
 
     // для тестов и отладки
-    window.FMFork = {
+    window.FMFork = Object.assign(window.FMFork || {}, {
         displayPath: displayPath,
         parseInputPath: parseInputPath,
         selectedFullPath: selectedFullPath,
@@ -990,5 +1201,5 @@
         mirrorToOtherPanel: mirrorToOtherPanel,
         collectEntries: collectEntries,
         openLink: openLink
-    };
+    });
 })();

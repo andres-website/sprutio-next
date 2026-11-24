@@ -19,6 +19,25 @@ services:
   app:
     image: sprutio-next/app
     build: {<<: *build, dockerfile: app/Dockerfile}
+    environment:
+      # ИИ-подсказки «через сервер»; на стенде — Ollama из профиля ai (stand/dev.sh up-ai)
+      FM_AI_BASE_URL: ${FM_AI_BASE_URL:-}
+      FM_AI_MODEL: ${FM_AI_MODEL:-}
+      FM_AI_API_KEY: ${FM_AI_API_KEY:-}
+      FM_AI_API: ${FM_AI_API:-completions}
+
+  # Ollama для проверки ИИ-подсказок (не обязательна): только 127.0.0.1:11434 хоста и сеть стенда
+  ollama:
+    image: ollama/ollama:latest
+    profiles: ["ai"]
+    ports:
+      - "127.0.0.1:11434:11434"
+    environment:
+      OLLAMA_ORIGINS: "*"
+      OLLAMA_KEEP_ALIVE: "30m"
+    volumes:
+      - ./var/ollama:/root/.ollama
+    restart: unless-stopped
 
   rpc:
     image: sprutio-next/rpc
