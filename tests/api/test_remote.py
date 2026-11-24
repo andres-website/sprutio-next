@@ -115,6 +115,16 @@ def test_start_listing(remote):
     assert isinstance(remote.ls(remote.home), dict)
 
 
+@pytest.mark.orig_differs(strict=False)
+def test_sftp_root_is_root(remote):
+    if remote.kind != "sftp":
+        pytest.skip("только SFTP")
+    d = remote.call("/actions/files/list", {"path": "/", "session": remote.session("/")})["data"]
+    names = {i["name"] for i in d["items"]}
+    assert d["path"] == "/"
+    assert {"etc", "usr"} <= names
+
+
 def test_mkdir_write_read(remote, rwork):
     remote.mkdir(rwork + "/sub")
     remote.touch(rwork + "/index.html", CYR)

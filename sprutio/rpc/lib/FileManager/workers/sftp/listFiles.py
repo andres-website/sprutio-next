@@ -8,9 +8,8 @@ class ListFiles(BaseWorkerCustomer):
     def __init__(self, path, session, *args, **kwargs):
         super(ListFiles, self).__init__(*args, **kwargs)
 
+        # Оригинал подменял '/' на '.' (домашнюю папку) — корень удалённого сервера был недоступен.
         self.path = os.path.normpath(path)
-        if self.path == '/':
-            self.path = '.'
         self.session = session
 
     def run(self):
