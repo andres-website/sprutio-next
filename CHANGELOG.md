@@ -8,6 +8,8 @@ Versions follow [Semantic Versioning](https://semver.org/); 0.x — work in prog
 - Editor and viewer: files up to 20 MB.
 - Login page: browser language by default, language flags switch the page immediately.
 - Drag-and-drop upload of folders with their whole structure (nested and empty folders included).
+- Symlinks: double click or Enter opens the target folder or file; the target is shown on hover.
+- Remote servers: "/" opens the server root; folders with files of unknown owners open (owner shown as uid).
 
 ## [0.5.0] — 2026-11-19 — Server installation
 - Installation on a server: `docker-compose.yml` and `install.sh` — works with the server's own files and users.
