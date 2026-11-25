@@ -38,7 +38,7 @@ sudo ./install.sh
   выполняются от имени вошедшего пользователя. Вход под root возможен, если у root задан пароль.
 - Обновление: `git pull && sudo ./install.sh`. Остановить: `sudo ./install.sh stop`, логи: `sudo ./install.sh logs`.
 - Свой адрес для кнопки «Выход» (например, панель хостинга): `sudo FM_LOGOUT_URL=https://example.com ./install.sh`.
-- Другой порт: `sudo FM_HTTPS_PORT=8443 ./install.sh`. Порт открыт всем — при необходимости ограничьте его файрволом.
+- Другой порт: `sudo FM_HTTPS_PORT=8443 ./install.sh` (или строка `FM_HTTPS_PORT=8443` в файле `.env` рядом с `install.sh`). Порт открыт всем — при необходимости ограничьте его файрволом.
 - ИИ-подсказки «через сервер» (OpenAI-совместимый API; ключ остаётся на сервере):
   `sudo FM_AI_BASE_URL=https://api.openai.com/v1 FM_AI_MODEL=<модель> FM_AI_API_KEY=<ключ> ./install.sh`.
   Ollama на этом же сервере (запущена с `OLLAMA_HOST=0.0.0.0`):

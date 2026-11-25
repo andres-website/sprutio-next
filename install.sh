@@ -32,6 +32,10 @@ echo "== Запуск"
 docker compose up -d --force-recreate -V frontend
 docker compose up -d --remove-orphans
 
+# порт может быть задан в .env рядом с docker-compose.yml (его читает и docker compose)
+if [ -z "${FM_HTTPS_PORT:-}" ] && [ -f .env ]; then
+  FM_HTTPS_PORT=$(sed -n 's/^FM_HTTPS_PORT=//p' .env | tail -1)
+fi
 PORT=${FM_HTTPS_PORT:-9443}
 HOST=$(hostname -I 2>/dev/null | awk '{print $1}')
 cat <<EOF

@@ -39,7 +39,7 @@ Open `https://<server-address>:9443` and log in with the username and password o
   as the logged-in user. Logging in as root is possible if root has a password.
 - Update: `git pull && sudo ./install.sh`. Stop: `sudo ./install.sh stop`, logs: `sudo ./install.sh logs`.
 - Your own address for the Logout button (e.g. a hosting panel): `sudo FM_LOGOUT_URL=https://example.com ./install.sh`.
-- Another port: `sudo FM_HTTPS_PORT=8443 ./install.sh`. The port is open to everyone — restrict it with a firewall if needed.
+- Another port: `sudo FM_HTTPS_PORT=8443 ./install.sh` (or a `FM_HTTPS_PORT=8443` line in `.env` next to `install.sh`). The port is open to everyone — restrict it with a firewall if needed.
 - AI suggestions "via the server" (OpenAI-compatible API; the key stays on the server):
   `sudo FM_AI_BASE_URL=https://api.openai.com/v1 FM_AI_MODEL=<model> FM_AI_API_KEY=<key> ./install.sh`.
   Ollama on the same server (started with `OLLAMA_HOST=0.0.0.0`):
