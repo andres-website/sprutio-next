@@ -68,8 +68,8 @@ Log in at `https://<server-address>:9443` as `fmtest` with the `FM_TEST_PASS` pa
   Falls back to the original search when the remote host has no shell tools.
 
 **Interface**
-- Path inputs above both panels (on the top menu bar): type or paste a path (`\` works too), Enter to go,
-  Ctrl+L / Alt+D to focus. The ▾ button temporarily slides the original menu out below them.
+- Path inputs above both panels (on the top menu bar): type or paste a path (`\` works too), Enter to go
+  (a path to a file opens its folder and selects the file), Ctrl+L / Alt+D to focus. The ▾ button temporarily slides the original menu out below them.
 - ⇢ / ⇠ button next to the input: open the same folder in the other panel, like in Total Commander.
 - "Full path" button: copies the full path of the selected file to the clipboard and shows it
   so you can select a part of it.

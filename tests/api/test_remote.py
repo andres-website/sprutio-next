@@ -141,6 +141,17 @@ def test_sftp_unknown_owner(remote, rwork):
     assert items["orphan.txt"]["owner"] == "4242"
 
 
+def test_list_file_path_fails_parent_has_it(remote, rwork):
+    """Основа перехода по вставленному пути к файлу (строка пути форка): листинг файла — ошибка,
+    в листинге родительской папки файл есть и он не папка."""
+    remote.touch(rwork + "/config.php", "<?php\n")
+    r = remote.post("/actions/files/list", {"path": rwork + "/config.php",
+                                             "session": remote.session(rwork + "/config.php")})
+    assert r.status_code != 200 or r.json().get("error")
+    items = remote.ls(rwork)
+    assert "config.php" in items and not items["config.php"].get("is_dir")
+
+
 def test_mkdir_write_read(remote, rwork):
     remote.mkdir(rwork + "/sub")
     remote.touch(rwork + "/index.html", CYR)

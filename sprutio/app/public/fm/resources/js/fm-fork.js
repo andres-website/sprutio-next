@@ -491,6 +491,81 @@
         return path;
     }
 
+    // родительская папка введённого пути (SFTP: относительные пути от домашнего каталога, корень — '.')
+    function parentPath(path, session) {
+        var sep = isWindowsPath(path) && path.indexOf('/') === -1 ? '\\' : '/';
+        var idx = path.lastIndexOf(sep);
+        if (idx > 0) {
+            var parent = path.substring(0, idx);
+            return /^[a-zA-Z]:$/.test(parent) ? parent + sep : parent;
+        }
+        if (idx === 0) {
+            return '/';
+        }
+        return isSftp(session) ? '.' : null;
+    }
+
+    function baseName(path) {
+        return path.replace(/[\\/]+$/, '').split(/[\\/]/).pop();
+    }
+
+    function listPath(panel, path, ok, fail) {
+        FM.backend.ajaxSend('/actions/files/list', {
+            params: {session: panel.session, path: path},
+            success: function (response) { ok(Ext.util.JSON.decode(response.responseText).data); },
+            failure: function (response) { fail(response); }
+        });
+    }
+
+    function showListing(panel, listing) {
+        // то же, что FileHandler.openDirectory при успешном ответе (без второго запроса)
+        if (listing.path !== '/') {
+            listing.items.unshift({name: '..', is_dir: true});
+        }
+        var app = FM.getApplication();
+        app.fireEvent(FM.Events.file.listFiles, listing, [panel]);
+        app.fireEvent(FM.Events.main.saveSession, [panel]);
+    }
+
+    function selectByName(panel, name) {
+        var grid = panel.filelist;
+        var record = grid && grid.store.findRecord('name', name, 0, false, true, true);
+        if (record) {
+            grid.getSelectionModel().select(record);
+            grid.getView().focusRow(record);
+        }
+        return !!record;
+    }
+
+    // Переход по введённому пути. Путь к файлу (…/real_review/config.php) открывает его папку и выделяет файл.
+    function openTypedPath(panel, path) {
+        FM.helpers.SetLoading(panel.body, tr('Loading...'));
+        listPath(panel, path, function (listing) {
+            showListing(panel, listing);
+        }, function () {
+            var parent = parentPath(path, panel.session);
+            var name = baseName(path);
+            if (parent === null || parent === path || !name) {
+                FM.helpers.UnsetLoading(panel.body);
+                FM.helpers.ShowError(tr("Directory doesn't exists"));
+                return;
+            }
+            listPath(panel, parent, function (listing) {
+                var item = (listing.items || []).filter(function (i) { return i.name === name; })[0];
+                if (!item || item.is_dir) {
+                    FM.helpers.UnsetLoading(panel.body);
+                    FM.helpers.ShowError(tr("Directory doesn't exists"));
+                    return;
+                }
+                showListing(panel, listing);
+                selectByName(panel, name);
+            }, function () {
+                FM.helpers.UnsetLoading(panel.body);
+                FM.helpers.ShowError(tr("Directory doesn't exists"));
+            });
+        });
+    }
+
     function panelBySide(side) {
         return window.FM ? FM[side] : null;
     }
@@ -782,7 +857,7 @@
                     e.preventDefault();
                     var path = parseInputPath(input.value, panel.session);
                     if (path !== null && path !== panel.session.path) {
-                        FM.Actions.Open.execute(panel, path);
+                        openTypedPath(panel, path);
                     } else {
                         input.value = displayPath(panel.session);
                     }
@@ -1200,6 +1275,8 @@
         uploadTree: uploadTree,
         mirrorToOtherPanel: mirrorToOtherPanel,
         collectEntries: collectEntries,
-        openLink: openLink
+        openLink: openLink,
+        openTypedPath: openTypedPath,
+        parentPath: parentPath
     });
 })();

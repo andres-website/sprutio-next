@@ -80,6 +80,46 @@ def test_top_input_relative_escape_native_selection(fm_page, api):
                             "return e.value.substring(e.selectionStart, e.selectionEnd); })()") == api.home + "/site"
 
 
+def selected_names(page, s):
+    return page.evaluate("s => FM[s].filelist.getSelectionModel().getSelection().map(r => r.get('name'))", s)
+
+
+def test_top_input_file_path_opens_its_folder(fm_page, api, work):
+    """Вставленный путь к файлу открывает его папку (в инпуте — путь папки) и выделяет файл."""
+    api.mkdir(work + "/real_review")
+    api.write(work + "/real_review/config.php", "<?php\n")
+    api.write(work + "/real_review/Makefile", "all:\n")
+    i = inp(fm_page, "Left")
+    i.fill(work + "/real_review/config.php")
+    i.press("Enter")
+    wait_input(fm_page, work + "/real_review", "Left")
+    assert fm_page.evaluate("FM.Left.session.path") == work + "/real_review"
+    fm_page.wait_for_function("s => FM[s].filelist.getSelectionModel().getSelection()"
+                              ".some(r => r.get('name') === 'config.php')", arg="Left", timeout=5000)
+    assert fm_page.locator(".x-window", has_text="Directory").count() == 0
+    # файл без расширения и относительный путь (от текущей папки) — тоже
+    i.fill("Makefile")
+    i.press("Enter")
+    fm_page.wait_for_function("s => FM[s].filelist.getSelectionModel().getSelection()"
+                              ".some(r => r.get('name') === 'Makefile')", arg="Left", timeout=5000)
+    assert i.input_value() == work + "/real_review"
+    # несуществующий путь — ошибка оригинала, панель остаётся на месте
+    i.fill(work + "/real_review/nope/x.php")
+    i.press("Enter")
+    fm_page.locator(".x-window", has_text="Directory doesn't exists").wait_for(timeout=10000)
+    assert fm_page.evaluate("FM.Left.session.path") == work + "/real_review"
+
+
+def test_parent_path_helper(fm_page):
+    pp = "([p, t]) => FMFork.parentPath(p, {type: t})"
+    assert fm_page.evaluate(pp, ["/srv/a/config.php", "home"]) == "/srv/a"
+    assert fm_page.evaluate(pp, ["/config.php", "home"]) == "/"
+    assert fm_page.evaluate(pp, ["www/config.php", "sftp"]) == "www"
+    assert fm_page.evaluate(pp, ["config.php", "sftp"]) == "."
+    assert fm_page.evaluate(pp, ["C:\\www\\a.php", "ftp"]) == "C:\\www"
+    assert fm_page.evaluate(pp, ["C:\\a.php", "ftp"]) == "C:\\"
+
+
 def test_top_input_ctrl_l(fm_page, api):
     fm_page.locator(ACTIVE + " .x-grid-item").first.click()
     fm_page.keyboard.press("Control+l")
